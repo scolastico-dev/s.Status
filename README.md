@@ -1,9 +1,11 @@
 # s.Default
-[![badge](https://img.shields.io/github/license/scolastico-dev/s.Default)](https://github.com/scolastico/s.Default/blob/main/LICENSE)
-[![badge](https://img.shields.io/github/languages/code-size/scolastico-dev/s.Default)](#)
-[![badge](https://img.shields.io/github/issues/scolastico-dev/s.Default)](https://github.com/scolastico/s.Default/issues)
-[![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Default?label=version)](https://github.com/scolastico/s.Default/releases)
-[![badge](https://github.com/scolastico-dev/s.Default/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico/s.Default/actions)
+[![badge](https://img.shields.io/github/license/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/blob/main/LICENSE)
+[![badge](https://img.shields.io/github/languages/code-size/scolastico-dev/s.Status)](#)
+[![badge](https://img.shields.io/github/issues/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/issues)
+[![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Status?label=version)](https://github.com/scolastico/s.Status/releases)
+[![badge](https://github.com/scolastico-dev/s.Status/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico/s.Status/actions)
+
+# This project is currently not functional, please come back later!
 
 ## *<This segment should be deleted before publishing!>*
 Your ToDo's:
