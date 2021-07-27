@@ -1,4 +1,4 @@
-# s.Status
+# s.Status | This projekt isnt ready yet... Please come back later! <3
 [![badge](https://img.shields.io/github/license/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/blob/main/LICENSE)
 [![badge](https://img.shields.io/github/languages/code-size/scolastico-dev/s.Status)](#)
 [![badge](https://img.shields.io/github/issues/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/issues)
