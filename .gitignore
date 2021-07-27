@@ -120,4 +120,8 @@ buildNumber.properties
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven
 
 config.json
+language.json
 error.*
+database.sqlite
+web/
+BootstrapStudio/export/

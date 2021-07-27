@@ -8,6 +8,29 @@
         <outputRelativeToContentRoot value="true" />
         <module name="s.Default" />
       </profile>
+      <profile name="Annotation profile for s.Status" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/io/ebean/querybean-generator/12.9.3/querybean-generator-12.9.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/avaje/composite/composite-testing/3.1/composite-testing-3.1.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/testng/testng/6.9.10/testng-6.9.10.jar" />
+          <entry name="$MAVEN_REPOSITORY$/com/beust/jcommander/1.48/jcommander-1.48.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/beanshell/bsh/2.0b4/bsh-2.0b4.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/assertj/assertj-core/3.3.0/assertj-core-3.3.0.jar" />
+          <entry name="$MAVEN_REPOSITORY$/com/h2database/h2/1.4.191/h2-1.4.191.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mockito/mockito-core/1.10.19/mockito-core-1.10.19.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/objenesis/objenesis/2.1/objenesis-2.1.jar" />
+          <entry name="$MAVEN_REPOSITORY$/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/avaje/composite/junit/1.1/junit-1.1.jar" />
+          <entry name="$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar" />
+        </processorPath>
+        <module name="s.Status" />
+      </profile>
     </annotationProcessing>
   </component>
 </project>
