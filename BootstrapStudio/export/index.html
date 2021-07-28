@@ -88,7 +88,7 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th class="col col-md-auto">Started</th>
+                                                    <th class="text-nowrap col col-md-auto">Started&nbsp;</th>
                                                     <th class="col col-md-auto">Ended</th>
                                                     <th class="col">Reason</th>
                                                     <th class="text-right col col-md-auto">Status</th>
@@ -96,14 +96,14 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>00.00.000T00:00</td>
+                                                    <td class="text-nowrap">00.00.0000 00:00</td>
                                                     <td><br></td>
                                                     <td>The reason for this incident</td>
                                                     <td class="text-right">Fixed</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>00.00.000T00:00</td>
-                                                    <td>00.00.000T00:00<br></td>
+                                                    <td class="text-nowrap">00.00.0000 00:00</td>
+                                                    <td>00.00.0000T00:00<br></td>
                                                     <td>The reason for this incident</td>
                                                     <td class="text-right">Fixed</td>
                                                 </tr>
@@ -150,8 +150,11 @@
         </div>
     </main>
     <footer style="margin-top: 20px;">
-        <p style="text-align: center;"><a href="#">s.Status</a> by&nbsp;<a href="#">scolastico</a>&nbsp;-&nbsp;<a href="#">About</a>&nbsp;-&nbsp;<a href="#">Data Privacy<br></a></p>
-    </footer>
+        <div class="dropdown" style="text-align: center;"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">Language - English</button>
+            <div class="dropdown-menu"><a class="dropdown-item" href="#">First Item</a><a class="dropdown-item" href="#">Second Item</a><a class="dropdown-item" href="#">Third Item</a></div>
+        </div>
+        <p style="text-align: center;margin-top: 10px;"><a href="#">s.Status</a> by&nbsp;<a href="#">scolastico</a>&nbsp;-&nbsp;<a href="#">About</a>&nbsp;-&nbsp;<a href="#">Data Privacy<br></a></p>
+    </footer><script src="assets/js/chart.min.js"></script>
 <script>
     const labels = ["Perfect", "Good", "Bad"];
     const data = {

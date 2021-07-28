@@ -43,6 +43,13 @@
     </main>
     <footer style="margin-top: 20px;">
         <p style="text-align: center;">
+            <div class="dropdown" style="text-align: center;"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">Language - {{ language.languageName }}</button>
+                <div class="dropdown-menu">
+                    {% for entry in lanugages %}
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="setLanguage('{{ entry.key }}');">entry.value</a>
+                    {% endfor %}
+                </div>
+            </div>
             <a href="https://github.com/scolastico-dev/s.Status">s.Status</a> by&nbsp;<a href="https://scolasti.co/">scolastico</a>
             {% for button in pageButtons %}
                 - <a href="{{ button.value }}">{{ language.additionalLanguageData[button.key] }}</a>
