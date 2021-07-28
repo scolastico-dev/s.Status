@@ -21,7 +21,7 @@ jobs:
         if: github.event_name == 'release'
         name: Get latest version name from GitHub
         with:
-          repository: scolastico-dev/s.Default # DONT FORGET TO REPLACE GITHUB REPO NAME HERE
+          repository: scolastico-dev/s.Status
           excludes: draft
       - name: Declare some variables
         id: vars
@@ -106,30 +106,7 @@ jobs:
         name: Upload builded jar to artifacts
         with:
           name: build
-          path: ${{ github.workspace }}/target/example-jar-with-dependencies.jar # DONT FORGET TO REPLACE PROJECT NAME HERE
-          retention-days: 1
-  javadoc:
-    name: Generate Javadoc
-    runs-on: ubuntu-20.04
-    needs: test
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: prepared-repo
-      - name: Set up JDK 12
-        uses: actions/setup-java@v1
-        with:
-          java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
-      - name: Generate javadocs with Mmven
-        run: mvn -B javadoc:javadoc --file pom.xml
-      - uses: actions/upload-artifact@v2
-        name: Upload javadocs to artifacts
-        with:
-          name: javadocs
-          path: ${{ github.workspace }}/target/site/apidocs
+          path: ${{ github.workspace }}/target/s.Status-jar-with-dependencies.jar
           retention-days: 1
   ci:
     name: Continuous Integration
@@ -149,7 +126,7 @@ jobs:
       - name: Upload to Release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: example-jar-with-dependencies.jar application/java-archive # DONT FORGET TO REPLACE PROJECT NAME HERE
+          args: s.Status-jar-with-dependencies.jar application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: peaceiris/actions-gh-pages@v3

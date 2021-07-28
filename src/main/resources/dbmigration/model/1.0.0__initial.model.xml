@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="incident_archive" pkName="pk_incident_archive">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="check_id" type="varchar(100)" notnull="true"/>
+            <column name="created_at" type="bigint" notnull="true"/>
+            <column name="ended_at" type="bigint" notnull="true"/>
+            <column name="reason" type="varchar(1000)" notnull="true"/>
+            <column name="status" type="integer(1)" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="planned_maintenance" pkName="pk_planned_maintenance">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="check_id" type="varchar(100)" notnull="true"/>
+            <column name="starting_at" type="bigint" notnull="true"/>
+            <column name="ending_at" type="bigint" notnull="true"/>
+            <column name="reason" type="varchar(1000)" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="status_check_result" pkName="pk_status_check_result">
+            <column name="id" type="bigint" primaryKey="true"/>
+            <column name="check_id" type="varchar(100)" notnull="true"/>
+            <column name="created_at" type="bigint" notnull="true"/>
+            <column name="check_duration" type="integer" notnull="true"/>
+            <column name="status" type="integer(1)" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>
