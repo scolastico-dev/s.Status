@@ -1,5 +1,8 @@
 package me.scolastico.s.status;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import com.github.lalyos.jfiglet.FigletFont;
 import com.sun.net.httpserver.HttpExchange;
 import io.ebean.Database;
@@ -43,6 +46,7 @@ import me.scolastico.tools.web.interfaces.WebServerPreExecuterInterface;
 import org.apache.commons.io.FileUtils;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+import org.slf4j.LoggerFactory;
 
 public class Application {
 
@@ -99,6 +103,21 @@ public class Application {
       }
       language = languageConfigConfigHandler.loadConfig();
       if (config.isDebug()) languageConfigConfigHandler.storeConfig(language);
+      ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
+
+      System.out.print(Ansi.ansi().a("Setting logging behaviour... ").fgYellow());
+      ConsoleLoadingAnimation.enable();
+      LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+      Logger ebeanLogger = loggerContext.getLogger("io.ebean");
+      Logger reflectionsLogger = loggerContext.getLogger("org.reflections");
+      if (!config.isDebug()) {
+        ebeanLogger.setLevel(Level.WARN);
+        reflectionsLogger.setLevel(Level.WARN);
+      } else {
+        ebeanLogger.setLevel(Level.DEBUG);
+        reflectionsLogger.setLevel(Level.DEBUG);
+      }
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
 
