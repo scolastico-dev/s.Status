@@ -118,22 +118,12 @@ jobs:
         name: Download build
         with:
           name: build
-      - uses: actions/download-artifact@v2
-        name: Download javadocs
-        with:
-          name: javadocs
-          path: javadocs/
       - name: Upload to Release
         uses: JasonEtco/upload-to-release@master
         with:
           args: s.Status-jar-with-dependencies.jar application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: peaceiris/actions-gh-pages@v3
-        name: Update live javadocs
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: javadocs/
   cleanup:
     name: Cleanup
     runs-on: ubuntu-20.04
