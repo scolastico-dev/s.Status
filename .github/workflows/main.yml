@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-20.04
     continue-on-error: true
     if: always()
-    needs: [prepare, test, build, javadoc, ci]
+    needs: [prepare, test, build, ci]
     steps:
       - uses: geekyeggo/delete-artifact@v1
         name: Delete prepared repo artifact
