@@ -35,7 +35,9 @@ public class StatusPage implements SimpleWebsiteInterface {
     for (String id:Application.getLanguage().getLanguages().keySet()) {
       languages.put(id, Application.getLanguage().getLanguages().get(id).getLanguageName());
     }
-    map.put("languages", languages);
+    if (languages.size() > 1) {
+      map.put("languages", languages);
+    }
     map.put("pageButtons", config.getPageButtons());
     map.put("statusChecks", config.getStatusChecks());
     map.put("nextUpdateIn", config.getLiveUpdateInterval());

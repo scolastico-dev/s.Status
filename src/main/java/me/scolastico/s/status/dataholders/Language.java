@@ -19,7 +19,7 @@ public class Language {
   private String workingOnIssue = "Working On Issues";
   private String seemsToBeOnlineAgain = "Seems To Be Online Again";
   private String fixedIssue = "Fixed Issues";
-  private String noIncidentsFound = "Seems like there where no incidents in the last 30 days! Yay!";
+  private String noIncidentsFound = "Seems like there were no incidents in the last 30 days! Yay!";
   private String incidentInfoCard = "It seems like this service has currently some problems! For more information scroll down to the incident list.";
   private String responseTime = "Response time in ms";
   private String onlinePerDay = "Online per day in %";
