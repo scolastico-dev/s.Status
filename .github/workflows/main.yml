@@ -101,7 +101,7 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Build with maven
-        run: mvn -B clean install compile assembly:single --file pom.xml
+        run: mvn -B clean install compile package
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
         with:
