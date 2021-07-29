@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
-import me.scolastico.mysql.manager.MysqlManager;
 import me.scolastico.s.status.cli.CopyDefaultFilesCommand;
 import me.scolastico.s.status.cli.HelpCommand;
 import me.scolastico.s.status.cli.KillCommand;
@@ -54,7 +53,6 @@ public class Application {
   private static Config config;
   private static ConfigHandler<LanguageConfig> languageConfigConfigHandler;
   private static LanguageConfig language;
-  private static MysqlManager mysqlManager;
   private static Database database;
   private static Thread shutdownHook;
   private static boolean started = false;
@@ -349,10 +347,6 @@ public class Application {
 
   public static void setLanguage(LanguageConfig language) {
     Application.language = language;
-  }
-
-  public static MysqlManager getMysqlManager() {
-    return mysqlManager;
   }
 
   public static String getBranch() {

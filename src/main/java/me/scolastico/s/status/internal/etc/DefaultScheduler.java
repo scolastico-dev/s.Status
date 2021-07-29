@@ -1,7 +1,6 @@
 package me.scolastico.s.status.internal.etc;
 
 import java.util.HashMap;
-import me.scolastico.mysql.manager.MysqlManager;
 import me.scolastico.s.status.Application;
 import me.scolastico.s.status.database.IncidentArchive;
 import me.scolastico.s.status.database.StatusCheckResult;
@@ -19,7 +18,6 @@ public class DefaultScheduler {
   private static final HashMap<String, Long> lastChecked = new HashMap<>();
 
   public static void run() throws Exception {
-    MysqlManager mysqlManager = Application.getMysqlManager();
     for (StatusCheck check:Application.getConfig().getStatusChecks()) {
       new Thread(
               new Runnable() {
