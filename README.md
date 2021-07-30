@@ -1,9 +1,9 @@
 # s.Status
-[![badge](https://img.shields.io/github/license/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/blob/main/LICENSE)
+[![badge](https://img.shields.io/github/license/scolastico-dev/s.Status)](https://github.com/scolastico-dev/s.Status/blob/main/LICENSE)
 [![badge](https://img.shields.io/github/languages/code-size/scolastico-dev/s.Status)](#)
-[![badge](https://img.shields.io/github/issues/scolastico-dev/s.Status)](https://github.com/scolastico/s.Status/issues)
-[![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Status?label=version)](https://github.com/scolastico/s.Status/releases)
-[![badge](https://github.com/scolastico-dev/s.Status/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico/s.Status/actions)
+[![badge](https://img.shields.io/github/issues/scolastico-dev/s.Status)](https://github.com/scolastico-dev/s.Status/issues)
+[![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Status?label=version)](https://github.com/scolastico-dev/s.Status/releases)
+[![badge](https://github.com/scolastico-dev/s.Status/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Status/actions)
 [![View Demo](https://img.shields.io/badge/-View%20Demo-green)](https://status.scolasti.co/)
 
 ## Introduction
