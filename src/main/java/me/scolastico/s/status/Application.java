@@ -140,6 +140,7 @@ public class Application {
       MigrationConfig migrationConfig = new MigrationConfig();
       if (config.getDatabaseType() == DatabaseType.SQLITE) {
         migrationConfig.setMigrationPath("dbmigration/sqlite");
+        dataSourceConfig.setDriver("org.sqlite.JDBC");
         dataSourceConfig.setUrl("jdbc:sqlite:" + config.getSqliteFile());
         dataSourceConfig.setUsername("");
         dataSourceConfig.setPassword("");
@@ -147,6 +148,7 @@ public class Application {
       } else {
         if (config.getDatabaseType() == DatabaseType.MYSQL) {
           migrationConfig.setMigrationPath("dbmigration/mysql");
+          dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
           dataSourceConfig.setUrl("jdbc:mysql://"
               + config.getMysqlHost() + ":"
               + config.getMysqlPort() + "/"
@@ -154,6 +156,7 @@ public class Application {
           );
         } else {
           migrationConfig.setMigrationPath("dbmigration/mariadb");
+          dataSourceConfig.setDriver("org.mariadb.jdbc.Driver");
           dataSourceConfig.setUrl("jdbc:mariadb://"
               + config.getMysqlHost() + ":"
               + config.getMysqlPort() + "/"
