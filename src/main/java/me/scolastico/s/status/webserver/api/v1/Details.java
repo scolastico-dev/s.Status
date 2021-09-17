@@ -76,7 +76,7 @@ public class Details implements SimpleWebsiteInterface {
               duration = (double) (getDayEnding(startedAt) - startedAt);
               uptimePercent.put(startDaysInThePast, currentPercent-((100D*duration)/86400D));
               duration = (double)(endedAt - getDayBeginning(endedAt));
-              currentPercent = uptimePercent.get(startDaysInThePast-daysBetween);
+              currentPercent = uptimePercent.getOrDefault(startDaysInThePast - daysBetween, 0.0);
               uptimePercent.remove(startDaysInThePast-daysBetween);
               uptimePercent.put(startDaysInThePast-daysBetween, currentPercent-((100D*duration)/86400D));
             } else {
