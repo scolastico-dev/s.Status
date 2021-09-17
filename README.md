@@ -5,6 +5,7 @@
 [![badge](https://img.shields.io/github/v/tag/scolastico-dev/s.Status?label=version)](https://github.com/scolastico-dev/s.Status/releases)
 [![badge](https://github.com/scolastico-dev/s.Status/actions/workflows/main.yml/badge.svg)](https://github.com/scolastico-dev/s.Status/actions)
 [![View Demo](https://img.shields.io/badge/-View%20Demo-green)](https://status.scolasti.co/)
+[![Documentation](https://img.shields.io/badge/-Documentation-green)](https://docs.scolasti.co/s.Status/main/)
 
 ## Introduction
 s.Status is a simple solution for monitoring pingable services such as database servers or http servers and providing a live status page. With the built in plugin system it is easy to add some functionalities like notification services.
