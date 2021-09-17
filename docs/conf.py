@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Auth Server'
+project = 's.Status'
 copyright = '2021, Joschua Becker EDV'
 author = 'Joschua Becker'
 
