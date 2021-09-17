@@ -16,7 +16,7 @@ public class CleanUpScheduler {
         .delete();
     new QStatusCheckResult()
         .createdAt
-        .lessThan(currentTime-(config.getKeepArchiveForDays()*24L*60L*60L))
+        .lessThan(currentTime-(config.getKeepResultsForDays()*24L*60L*60L))
         .delete();
     new QStatusCheckResult()
         .checkDuration
