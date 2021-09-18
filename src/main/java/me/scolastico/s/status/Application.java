@@ -135,6 +135,18 @@ public class Application {
         }
       }
 
+      System.out.print(Ansi.ansi().a("Checking database drivers... ").fgYellow());
+      ConsoleLoadingAnimation.enable();
+      Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+      Class.forName("com.mysql.cj.jdbc.Driver");
+      Class.forName("org.mariadb.jdbc.Driver");
+      Class.forName("org.sqlite.JDBC");
+      Class.forName("org.postgresql.Driver");
+      Class.forName("oracle.jdbc.driver.OracleDriver");
+      Class.forName("org.h2.Driver");
+      ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
+
       System.out.print(Ansi.ansi().a("Connecting to database... ").fgYellow());
       ConsoleLoadingAnimation.enable();
       DatabaseConnector.connectToDatabase(config.getDatabaseConfig());
