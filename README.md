@@ -33,14 +33,16 @@ To simplify the setup, here is an example of a working config:
   "staticFolderPath": "web/default-web-files/web/",
   
   # Database config
-  "mysqlUser": "status_page",
-  "mysqlPass": "P4$$w0rd",
-  "mysqlHost": "127.0.0.1",
-  "mysqlPort": 3306,
-  "mysqlDB": "status_page",
-  "sqliteFile": "database.sqlite",
-  # database type can be: SQLITE, MYSQL and MARIADB.
-  "databaseType": "SQLITE",
+  "databaseConfig": {
+    # database type can be: SQL, MYSQL, MARIADB, SQLITE, POSTGRES, ORACLE and H2.
+    "databaseType": "SQLITE",
+    "host": "database.sqlite",
+    "port": 3306,
+    "database": "database",
+    "username": "username",
+    "password": "P4$$word",
+    "debug": false
+  }
   
   # Report errors privat to us.
   # Would be nice if you let it on true! <3
