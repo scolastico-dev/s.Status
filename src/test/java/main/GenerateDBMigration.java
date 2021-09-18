@@ -13,9 +13,13 @@ class GenerateDBMigration {
     DbMigration dbMigration = DbMigration.create();
     dbMigration.setVersion("1.0.0");
     dbMigration.setName("initial");
+    dbMigration.addPlatform(Platform.SQLSERVER17, "sql");
     dbMigration.addPlatform(Platform.MYSQL, "mysql");
     dbMigration.addPlatform(Platform.MARIADB, "mariadb");
     dbMigration.addPlatform(Platform.SQLITE, "sqlite");
+    dbMigration.addPlatform(Platform.POSTGRES, "postgres");
+    dbMigration.addPlatform(Platform.ORACLE, "oracle");
+    dbMigration.addPlatform(Platform.H2, "h2");
     dbMigration.generateMigration();
   }
 
