@@ -20,6 +20,7 @@ import me.scolastico.s.status.cli.CopyDefaultFilesCommand;
 import me.scolastico.s.status.cli.HelpCommand;
 import me.scolastico.s.status.cli.KillCommand;
 import me.scolastico.s.status.cli.ReloadConfigsCommand;
+import me.scolastico.s.status.cli.SaveConfigCommand;
 import me.scolastico.s.status.cli.ShowStatusCommand;
 import me.scolastico.s.status.cli.ToggleWebServerLogCommand;
 import me.scolastico.s.status.database.BaseModel;
@@ -180,6 +181,7 @@ public class Application {
       ConsoleManager.registerCommand(new ReloadConfigsCommand());
       ConsoleManager.registerCommand(new ToggleWebServerLogCommand());
       ConsoleManager.registerCommand(new KillCommand());
+      ConsoleManager.registerCommand(new SaveConfigCommand());
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
 
