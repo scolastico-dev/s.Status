@@ -51,7 +51,7 @@ public class DatabaseConnector {
           break;
 
         case "mysql":
-          dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
+          dataSourceConfig.setDriver("com.mysql.cj.jdbc.Driver");
           dataSourceConfig.setUrl("jdbc:mysql://"
               + config.getHost() + ":"
               + config.getPort() + "/"
@@ -70,7 +70,7 @@ public class DatabaseConnector {
 
         case "sqlite":
           dataSourceConfig.setDriver("org.sqlite.JDBC");
-          dataSourceConfig.setUrl("jdbc:sqlite:" + config.getDatabase());
+          dataSourceConfig.setUrl("jdbc:sqlite:" + config.getHost());
           dataSourceConfig.setIsolationLevel(TxIsolation.READ_UNCOMMITTED.getLevel());
           break;
 
