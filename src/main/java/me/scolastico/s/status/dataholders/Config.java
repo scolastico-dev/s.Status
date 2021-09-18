@@ -3,20 +3,14 @@ package me.scolastico.s.status.dataholders;
 import java.util.HashMap;
 import me.scolastico.s.status.enums.ApiUsability;
 import me.scolastico.s.status.enums.CheckTypes;
-import me.scolastico.s.status.enums.DatabaseType;
+import me.scolastico.s.status.enums.DataBaseType;
 
 public class Config {
 
   private int port = 42001;
   private String twigFolderPath = "web/default-web-files/twig/";
   private String staticFolderPath = "web/default-web-files/web/";
-  private String mysqlUser = "status_page";
-  private String mysqlPass = "P4$$w0rd";
-  private String mysqlHost = "127.0.0.1";
-  private int mysqlPort = 3306;
-  private String mysqlDB = "status_page";
-  private String sqliteFile = "database.sqlite";
-  private DatabaseType databaseType = DatabaseType.SQLITE;
+  private DatabaseConfig databaseConfig = new DatabaseConfig();
   private boolean reportErrorsOnline = true;
   private boolean debug = false;
   private boolean enableShutDownHook = true;
@@ -59,20 +53,20 @@ public class Config {
     return color;
   }
 
+  public DatabaseConfig getDatabaseConfig() {
+    return databaseConfig;
+  }
+
+  public void setDatabaseConfig(DatabaseConfig databaseConfig) {
+    this.databaseConfig = databaseConfig;
+  }
+
   public int getRunCleanUpEveryMinutes() {
     return runCleanUpEveryMinutes;
   }
 
   public void setRunCleanUpEveryMinutes(int runCleanUpEveryMinutes) {
     this.runCleanUpEveryMinutes = runCleanUpEveryMinutes;
-  }
-
-  public DatabaseType getDatabaseType() {
-    return databaseType;
-  }
-
-  public void setDatabaseType(DatabaseType databaseType) {
-    this.databaseType = databaseType;
   }
 
   public boolean isEnableShutDownHook() {
@@ -147,14 +141,6 @@ public class Config {
     this.timeoutMillis = timeoutMillis;
   }
 
-  public int getMysqlPort() {
-    return mysqlPort;
-  }
-
-  public void setMysqlPort(int mysqlPort) {
-    this.mysqlPort = mysqlPort;
-  }
-
   public int getNeedsToBeAliveForMinutesBeforeAutoConfirmation() {
     return needsToBeAliveForMinutesBeforeAutoConfirmation;
   }
@@ -217,46 +203,6 @@ public class Config {
 
   public void setPort(int port) {
     this.port = port;
-  }
-
-  public String getMysqlUser() {
-    return mysqlUser;
-  }
-
-  public void setMysqlUser(String mysqlUser) {
-    this.mysqlUser = mysqlUser;
-  }
-
-  public String getMysqlPass() {
-    return mysqlPass;
-  }
-
-  public void setMysqlPass(String mysqlPass) {
-    this.mysqlPass = mysqlPass;
-  }
-
-  public String getMysqlHost() {
-    return mysqlHost;
-  }
-
-  public void setMysqlHost(String mysqlHost) {
-    this.mysqlHost = mysqlHost;
-  }
-
-  public String getMysqlDB() {
-    return mysqlDB;
-  }
-
-  public void setMysqlDB(String mysqlDB) {
-    this.mysqlDB = mysqlDB;
-  }
-
-  public String getSqliteFile() {
-    return sqliteFile;
-  }
-
-  public void setSqliteFile(String sqliteFile) {
-    this.sqliteFile = sqliteFile;
   }
 
   public boolean isReportErrorsOnline() {

@@ -28,8 +28,9 @@ import me.scolastico.s.status.database.PlannedMaintenance;
 import me.scolastico.s.status.database.StatusCheckResult;
 import me.scolastico.s.status.dataholders.Config;
 import me.scolastico.s.status.dataholders.LanguageConfig;
-import me.scolastico.s.status.enums.DatabaseType;
+import me.scolastico.s.status.enums.DataBaseType;
 import me.scolastico.s.status.internal.etc.CleanUpScheduler;
+import me.scolastico.s.status.internal.etc.DatabaseConnector;
 import me.scolastico.s.status.internal.etc.DefaultScheduler;
 import me.scolastico.tools.console.ConsoleLoadingAnimation;
 import me.scolastico.tools.console.ConsoleManager;
@@ -136,49 +137,13 @@ public class Application {
 
       System.out.print(Ansi.ansi().a("Connecting to database... ").fgYellow());
       ConsoleLoadingAnimation.enable();
-      DataSourceConfig dataSourceConfig = new DataSourceConfig();
-      MigrationConfig migrationConfig = new MigrationConfig();
-      if (config.getDatabaseType() == DatabaseType.SQLITE) {
-        migrationConfig.setMigrationPath("dbmigration/sqlite");
-        dataSourceConfig.setDriver("org.sqlite.JDBC");
-        dataSourceConfig.setUrl("jdbc:sqlite:" + config.getSqliteFile());
-        dataSourceConfig.setUsername("");
-        dataSourceConfig.setPassword("");
-        dataSourceConfig.setIsolationLevel(TxIsolation.READ_UNCOMMITTED.getLevel());
-      } else {
-        if (config.getDatabaseType() == DatabaseType.MYSQL) {
-          migrationConfig.setMigrationPath("dbmigration/mysql");
-          dataSourceConfig.setDriver("com.mysql.jdbc.Driver");
-          dataSourceConfig.setUrl("jdbc:mysql://"
-              + config.getMysqlHost() + ":"
-              + config.getMysqlPort() + "/"
-              + config.getMysqlDB()
-          );
-        } else {
-          migrationConfig.setMigrationPath("dbmigration/mariadb");
-          dataSourceConfig.setDriver("org.mariadb.jdbc.Driver");
-          dataSourceConfig.setUrl("jdbc:mariadb://"
-              + config.getMysqlHost() + ":"
-              + config.getMysqlPort() + "/"
-              + config.getMysqlDB() + "?useLegacyDatetimeCode=false"
-          );
-        }
-        dataSourceConfig.setUsername(config.getMysqlUser());
-        dataSourceConfig.setPassword(config.getMysqlPass());
-      }
-      DatabaseConfig dbConfig = new DatabaseConfig();
-      dbConfig.setDataSourceConfig(dataSourceConfig);
-      dbConfig.setName(config.getMysqlDB());
-      dbConfig.setDefaultServer(true);
-      dbConfig.setClasses(Arrays.asList(BaseModel.class, IncidentArchive.class, PlannedMaintenance.class, StatusCheckResult.class));
-      database = DatabaseFactory.create(dbConfig);
+      DatabaseConnector.connectToDatabase(config.getDatabaseConfig());
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
 
       System.out.print(Ansi.ansi().a("Running migrations... ").fgYellow());
       ConsoleLoadingAnimation.enable();
-      MigrationRunner migrationRunner = new MigrationRunner(migrationConfig);
-      migrationRunner.run(database.getDataSource());
+      DatabaseConnector.runMigrations();
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
 
