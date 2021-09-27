@@ -17,6 +17,12 @@ public class HelpCommand implements Callable<Integer> {
         {"reload", "Reload the configuration files."},
         {"toggle-webserver-log", "Toggle the webserver log."},
         {"copy-default-files", "Copy the default files for the 'web' folder."},
+        {"ap-add-user", "Add an user for the admin panel."},
+        {"ap-remove-user", "Remove a user from the admin panel."},
+        {"ap-passwd", "Change the password of an admin panel user."},
+        {"ap-change-permissions", "Change the permissions of an admin panel user."},
+        {"ap-show-permissions", "Show which permissions a admin panel user has."},
+        {"ap-show-users", "Show a list of all users in the admin panel."},
         {"kill", "Exit s.Status without the soft-shutdown functions instantly."},
         {"exit", "Exit s.Status and return to your command line."}
     };

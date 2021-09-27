@@ -14,6 +14,7 @@ import me.scolastico.tools.console.ConsoleManager.ExitCommand;
 import me.scolastico.tools.handler.ErrorHandler;
 import me.scolastico.tools.routine.Routine;
 import me.scolastico.tools.routine.RoutineAnswer;
+import me.scolastico.tools.web.admin.AdminPanel;
 import org.fusesource.jansi.Ansi;
 
 public class RegisterCliCommandsRoutine implements Routine {
@@ -33,6 +34,7 @@ public class RegisterCliCommandsRoutine implements Routine {
       ConsoleManager.registerCommand(new ToggleWebServerLogCommand());
       ConsoleManager.registerCommand(new KillCommand());
       ConsoleManager.registerCommand(new SaveConfigCommand());
+      AdminPanel.enableCommands();
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
     } catch (Exception e) {

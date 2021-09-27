@@ -10,6 +10,7 @@ import me.scolastico.tools.routine.Routine;
 import me.scolastico.tools.routine.RoutineAnswer;
 import me.scolastico.tools.web.BrowserFingerprint;
 import me.scolastico.tools.web.WebServer;
+import me.scolastico.tools.web.admin.AdminPanel;
 import me.scolastico.tools.web.interfaces.WebServerPreExecuterInterface;
 import org.fusesource.jansi.Ansi;
 
@@ -23,16 +24,18 @@ public class StartWebServerRoutine implements Routine {
       ConsoleLoadingAnimation.enable();
       WebServer.start(config.getPort());
       WebServer.registerAllWebInterfacesInPackage("me.scolastico.s.status.webserver");
+      AdminPanel.enableWebServer();
       WebServer.setCheckForIndexHtml(true);
       WebServer.setOverrideFolderPath(config.getStaticFolderPath());
       WebServer.setCheckOverrideFolderFirst(true);
       WebServer.setWeightLessPerSecond(1);
       WebServer.setMaxUsageWeight(60);
+      Application.setShowWebServerConnectionLog(config.isShowWebServerLog());
       WebServer.registerWebServerPreExecuter(
           new WebServerPreExecuterInterface() {
             @Override
             public boolean execute(HttpExchange httpExchange) {
-              if (config.isShowWebServerLog() && Application.isStarted()) {
+              if (Application.isShowWebServerConnectionLog() && Application.isStarted()) {
                 BrowserFingerprint fingerprint = new BrowserFingerprint(httpExchange);
                 System.out.println(
                     Ansi.ansi().fgYellow().a("[INFO] [WebServer] ").reset().a("CONNECTION FROM "

@@ -121,6 +121,7 @@ buildNumber.properties
 
 docs/_build/
 
+adminPanelSettings.json
 config.json
 language.json
 error.*

@@ -8,6 +8,7 @@ import me.scolastico.tools.handler.ConfigHandler;
 import me.scolastico.tools.handler.ErrorHandler;
 import me.scolastico.tools.routine.Routine;
 import me.scolastico.tools.routine.RoutineAnswer;
+import me.scolastico.tools.web.admin.AdminPanel;
 import org.fusesource.jansi.Ansi;
 
 public class LoadConfigRoutine implements Routine {
@@ -33,6 +34,12 @@ public class LoadConfigRoutine implements Routine {
       if (config.isEnableErrorLogFile()) ErrorHandler.enableErrorLogFile();
       Application.setConfig(config);
       Application.setConfigHandler(configHandler);
+      ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
+
+      System.out.print(Ansi.ansi().a("Loading admin panel config... ").fgYellow());
+      ConsoleLoadingAnimation.enable();
+      AdminPanel.enableConfig();
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
     } catch (Exception e) {

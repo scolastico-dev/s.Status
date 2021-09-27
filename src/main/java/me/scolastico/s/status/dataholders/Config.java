@@ -3,7 +3,7 @@ package me.scolastico.s.status.dataholders;
 import java.util.HashMap;
 import me.scolastico.s.status.enums.ApiUsability;
 import me.scolastico.s.status.enums.CheckTypes;
-import me.scolastico.s.status.enums.DataBaseType;
+import me.scolastico.tools.ebean.DatabaseConfig;
 
 public class Config {
 

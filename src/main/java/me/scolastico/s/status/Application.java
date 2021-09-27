@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import me.scolastico.s.status.dataholders.Config;
 import me.scolastico.s.status.dataholders.LanguageConfig;
-import me.scolastico.s.status.internal.routines.starting.CheckingDatabaseDriversRoutine;
 import me.scolastico.s.status.internal.routines.starting.ConnectToDatabaseRoutine;
 import me.scolastico.s.status.internal.routines.starting.CopyDefaultFilesRoutine;
 import me.scolastico.s.status.internal.routines.starting.EnableSentryRoutine;
@@ -51,7 +50,6 @@ public class Application {
       routines.add(new LoadLanguageRoutine());
       routines.add(new SettingLoggingRoutine());
       routines.add(new EnableSentryRoutine());
-      routines.add(new CheckingDatabaseDriversRoutine());
       routines.add(new ConnectToDatabaseRoutine());
       routines.add(new CopyDefaultFilesRoutine());
       routines.add(new RegisterCliCommandsRoutine());
@@ -60,7 +58,6 @@ public class Application {
       routines.add(new StartSchedulerTasksRoutine());
       routines.add(new RegisterShutdownHookRoutine());
       routines.add(new FooterRoutine());
-
       RoutineManager manager = new RoutineManager(routines);
       HashMap<String, Object> objectMap = new HashMap<>();
       objectMap.put("args", args);
