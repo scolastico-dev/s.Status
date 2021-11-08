@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import me.scolastico.s.status.dataholders.Config;
 import me.scolastico.s.status.dataholders.LanguageConfig;
+import me.scolastico.s.status.internal.routines.starting.CheckConfigRoutine;
 import me.scolastico.s.status.internal.routines.starting.ConnectToDatabaseRoutine;
 import me.scolastico.s.status.internal.routines.starting.CopyDefaultFilesRoutine;
 import me.scolastico.s.status.internal.routines.starting.EnableSentryRoutine;
@@ -47,6 +48,7 @@ public class Application {
       ArrayList<Routine> routines = new ArrayList<>();
       routines.add(new HeaderRoutine());
       routines.add(new LoadConfigRoutine());
+      routines.add(new CheckConfigRoutine());
       routines.add(new LoadLanguageRoutine());
       routines.add(new SettingLoggingRoutine());
       routines.add(new EnableSentryRoutine());
