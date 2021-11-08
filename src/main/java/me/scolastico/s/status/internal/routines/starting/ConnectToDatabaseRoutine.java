@@ -36,8 +36,8 @@ public class ConnectToDatabaseRoutine implements Routine {
 
       return new RoutineAnswer(objectMap);
     } catch (Exception e) {
-      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ErrorHandler.handleFatal(e);
       return new RoutineAnswer(true, "exception");
     }

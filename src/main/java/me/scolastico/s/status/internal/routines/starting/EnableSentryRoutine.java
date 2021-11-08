@@ -28,8 +28,8 @@ public class EnableSentryRoutine implements Routine {
         }
       }
     } catch (Exception e) {
-      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ErrorHandler.handleFatal(e);
       return new RoutineAnswer(true, "exception");
     }

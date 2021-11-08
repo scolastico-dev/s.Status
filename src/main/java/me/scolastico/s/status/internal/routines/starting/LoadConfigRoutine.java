@@ -43,8 +43,8 @@ public class LoadConfigRoutine implements Routine {
       ConsoleLoadingAnimation.disable();
       System.out.println(Ansi.ansi().fgGreen().a("[OK]").reset());
     } catch (Exception e) {
-      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ConsoleLoadingAnimation.disable();
+      System.out.println(Ansi.ansi().fgRed().a("[FAIL]"));
       ErrorHandler.handleFatal(e);
       return new RoutineAnswer(true, "exception");
     }
