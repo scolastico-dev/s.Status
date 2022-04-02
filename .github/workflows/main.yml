@@ -6,27 +6,7 @@ on:
   release:
     types: [created]
   pull_request:
-    types: [opened]
     branches: [main]
-  schedule:
-    - cron: '25 1 * * 4'
-
-# Secrets which are needed for CI_DOCS:
-#   SSH_HOST: An ip address.
-#   SSH_PORT: The port for ssh. Default is 22.
-#   SSH_USER: The username for the login.
-#   SSH_PRIVATE_KEY: The private key for the login.
-#   DOCUMENTATION_REMOTE_HOST_PATH: The path where to store the documentation.
-#   SSH_KNOWN_HOST: To get the known host execute: ssh-keyscan -H <IP_ADRESS>
-
-env:
-  GENERATE_JAVADOC: false
-  CI_JAVADOC: false
-  CI_DOCS: true
-  CODE_QL_ANALYZE: true
-  USERNAME: scolastico-dev
-  REPO: s.Status
-  JAR_NAME: s.Status-jar-with-dependencies.jar
 
 jobs:
   prepare:
@@ -35,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Download repo from GitHub
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - uses: pozetroninc/github-action-get-latest-release@master
         id: version
         if: github.event_name == 'release'
@@ -48,11 +32,11 @@ jobs:
         run: |
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Set version in pom.xml
+      - name: Set version in build.gradle.kts
         uses: datamonsters/replace-action@v2
         if: github.event_name == 'release'
         with:
-          files: pom.xml
+          files: build.gradle.kts
           replacements: dev-snapshot=${{ steps.version.outputs.release }}
       - name: Set version in VERSION file
         uses: datamonsters/replace-action@v2
@@ -60,11 +44,11 @@ jobs:
         with:
           files: src/main/resources/staticVars/VERSION
           replacements: dev-snapshot=${{ steps.version.outputs.release }}
-      - name: Set version in pom.xml
+      - name: Set version in build.gradle.kts
         uses: datamonsters/replace-action@v2
         if: github.event_name != 'release'
         with:
-          files: pom.xml
+          files: build.gradle.kts
           replacements: dev-snapshot=dev-snapshot-${{ steps.vars.outputs.sha_short }}
       - name: Set version in VERSION file
         uses: datamonsters/replace-action@v2
@@ -86,8 +70,8 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
       - name: Set up JDK 12
         uses: actions/setup-java@v1
         if: steps.cache.outputs.cache-hit != 'true'
@@ -95,20 +79,18 @@ jobs:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
-      - name: Set up Maven
-        if: steps.cache.outputs.cache-hit != 'true'
-        uses: stCarolas/setup-maven@v4.2
+      - name: Setting permissions
+        run: chmod +x ./gradlew
       - name: Download dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: mvn -B dependency:resolve --file pom.xml
+        run: ./gradlew dependencies --refresh-dependencies
       - uses: actions/upload-artifact@v2
         name: Upload prepared repo to artifacts
         with:
           name: prepared-repo
           path: ${{ github.workspace }}
-  test:
-    if: github.event_name != 'schedule'
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-20.04
     needs: prepare
     steps:
@@ -116,130 +98,195 @@ jobs:
         name: Download prepared repository
         with:
           name: prepared-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - name: Cache dependencies
         uses: actions/cache@v2
         id: cache
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
       - name: Set up JDK 12
         uses: actions/setup-java@v1
         with:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4.2
-      - name: Test with maven
-        run: mvn -B test --file pom.xml
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
-    needs: [test, analyze]
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: prepared-repo
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-      - name: Set up JDK 12
-        uses: actions/setup-java@v1
-        with:
-          java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4.2
-      - name: Build with maven
-        run: mvn -B clean install compile package
+      - name: Setting permissions
+        run: chmod +x ./gradlew
+      - name: Build with gradle
+        run: ./gradlew build -x detekt
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
         with:
           name: build
-          path: ${{ github.workspace }}/target/${{ env.JAR_NAME }}
+          path: ${{ github.workspace }}/build/libs/${{ env.JAR_NAME }}
           retention-days: 1
-  javadoc:
-    name: Generate Javadoc
+      - uses: actions/upload-artifact@v2
+        name: Upload builded repo to artifacts
+        with:
+          name: builded-repo
+          path: ${{ github.workspace }}
+  test:
+    name: Test
     runs-on: ubuntu-20.04
-    needs: [test, analyze]
+    needs: Build
     steps:
       - uses: actions/download-artifact@v2
-        if: ${{ env.GENERATE_JAVADOC == 'true' }}
         name: Download prepared repository
         with:
-          name: prepared-repo
+          name: builded-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
       - name: Cache dependencies
-        if: ${{ env.GENERATE_JAVADOC == 'true' }}
         uses: actions/cache@v2
         id: cache
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: ~/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
       - name: Set up JDK 12
-        if: ${{ env.GENERATE_JAVADOC == 'true' }}
         uses: actions/setup-java@v1
         with:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4.2
-      - name: Generate javadocs with Maven
-        if: ${{ env.GENERATE_JAVADOC == 'true' }}
-        run: mvn -B javadoc:javadoc --file pom.xml
-      - uses: actions/upload-artifact@v2
-        if: ${{ env.GENERATE_JAVADOC == 'true' }}
-        name: Upload javadocs to artifacts
+      - name: Setting permissions
+        run: chmod +x ./gradlew
+      - name: Test with gradle
+        run: ./gradlew test
+  dokka:
+    name: Generate Dokka
+    runs-on: ubuntu-20.04
+    needs: [prepare, build-docs]
+    steps:
+      - uses: actions/download-artifact@v2
+        name: Download prepared repository
         with:
-          name: javadocs
-          path: ${{ github.workspace }}/target/site/apidocs
+          name: prepared-repo
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ~/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
+      - name: Set up JDK 12
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+          server-id: github
+          settings-path: ${{ github.workspace }}
+      - name: Setting permissions
+        run: chmod +x ./gradlew
+      - name: Generate dokka html with gradle
+        run: ./gradlew dokkaHtml
+      - name: Generate dokka javadaoc with gradle
+        run: ./gradlew dokkaJavadoc
+      - uses: actions/download-artifact@v2
+        name: Download builded documentation
+        with:
+          name: builded-docs
+          path: site/
+      - name: Move javadoc files into documentation.
+        run: mv build/dokka/javadoc site/javadoc
+      - name: Move dokka files into documentation.
+        run: mv build/dokka/html site/dokka
+      - uses: actions/upload-artifact@v2
+        name: Upload dokka documentation to artifacts
+        with:
+          name: dokka-docs
+          path: ${{ github.workspace }}/site/
           retention-days: 1
   ci:
     name: Continuous integration
     if: github.event_name == 'release'
     runs-on: ubuntu-20.04
-    needs: [build, javadoc]
+    needs: [build, dokka, test, detekt]
     steps:
+      - uses: actions/download-artifact@v2
+        name: Download prepared repository
+        with:
+          name: prepared-repo
+          path: repo/
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: repo/.github/actions.env
       - uses: actions/download-artifact@v2
         name: Download build
         with:
           name: build
       - uses: actions/download-artifact@v2
-        if: ${{ env.CI_JAVADOC == 'true' }}
-        name: Download javadocs
+        name: Download dokka-docs
         with:
-          name: javadocs
-          path: javadocs/
-      - name: Upload to Release
-        uses: JasonEtco/upload-to-release@master
+          name: dokka-docs
+          path: docs/
+      - uses: papeloto/action-zip@v1
         with:
-          args: ${{ env.JAR_NAME }} application/java-archive
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: docs/
+          dest: docs.zip
+      - name: Upload docs to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: docs.zip
+          asset_name: docs.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.JAR_NAME }}
+          asset_name: ${{ env.JAR_NAME }}
+          tag: ${{ github.ref }}
+          overwrite: true
       - uses: peaceiris/actions-gh-pages@v3
-        if: ${{ env.CI_JAVADOC == 'true' }}
-        name: Update live javadocs
+        if: ${{ env.CI_DOCS_TO_GH_PAGES == 'yes' }}
+        name: Update live documentation on GH pages
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: javadocs/
+          publish_dir: docs/
+      - name: Install SSH Key
+        if: ${{ env.CI_DOCS_TO_SERVER == 'yes' }}
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOST }}
+      - name: Deploy with rsync
+        if: ${{ env.CI_DOCS_TO_SERVER == 'yes' }}
+        run: rsync -avz -e 'ssh -p ${{ secrets.SSH_PORT }}' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENTATION_REMOTE_HOST_PATH }}
   cleanup:
     name: Cleanup
     runs-on: ubuntu-20.04
     continue-on-error: true
     if: always()
-    needs: [prepare, test, build, javadoc, ci, analyze]
+    needs: [prepare, test, build, dokka, ci, detekt, build-docs]
     steps:
       - uses: geekyeggo/delete-artifact@v1
         name: Delete prepared repo artifact
         with:
           name: prepared-repo
+      - uses: geekyeggo/delete-artifact@v1
+        name: Delete prepared repo artifact
+        with:
+          name: builded-repo
+      - uses: geekyeggo/delete-artifact@v1
+        name: Delete prepared repo artifact
+        with:
+          name: builded-docs
   build-docs:
-    if: github.event_name != 'schedule' && github.event_name != 'pull_request'
     name: Generate documentation
     runs-on: ubuntu-20.04
     steps:
@@ -248,80 +295,37 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      - name: Setup sphinx
-        run: pip install sphinx
-      - name: Setup furo
-        run: pip install furo
-      - name: Setup sphinx-multiversion
-        run: pip install sphinx-multiversion
+      - name: Setup MkDocs
+        run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
       - name: Generate Documentation
-        run: sphinx-multiversion docs build
+        run: mkdocs build --no-directory-urls -f ./docs/mkdocs.yml
       - uses: actions/upload-artifact@v2
         name: Upload builded files to artifacts
         with:
           name: builded-docs
-          path: build
-          retention-days: 1
-  ci-docs:
-    if: github.event_name != 'schedule' && github.event_name != 'pull_request'
-    name: Continuous integration of documentation
-    runs-on: ubuntu-20.04
-    needs: build-docs
-    steps:
-      - uses: actions/download-artifact@v2
-        if: ${{ env.CI_DOCS == 'true' }}
-        name: Download builded documentation
-        with:
-          name: builded-docs
-      - name: Install SSH Key
-        if: ${{ env.CI_DOCS == 'true' }}
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOST }}
-      - name: Deploy with rsync
-        if: ${{ env.CI_DOCS == 'true' }}
-        run: rsync -avz -e 'ssh -p ${{ secrets.SSH_PORT }}' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENTATION_REMOTE_HOST_PATH }}
-  analyze:
-    name: CodeQL Analyze
+          path: docs/site/
+  detekt:
+    name: Detekt code analysis
     needs: prepare
     runs-on: ubuntu-20.04
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ['java']
     steps:
       - uses: actions/download-artifact@v2
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
-        name: Download prepared repository
+        name: Download builded repository
         with:
           name: prepared-repo
       - name: Cache dependencies
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
         uses: actions/cache@v2
         id: cache
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
       - name: Set up JDK 12
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
         uses: actions/setup-java@v1
         with:
           java-version: 12
           server-id: github
           settings-path: ${{ github.workspace }}
-      - name: Initialize CodeQL
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
-        uses: github/codeql-action/init@v1
-        with:
-          languages: ${{ matrix.language }}
-      - name: Autobuild
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
-        uses: github/codeql-action/autobuild@v1
-      - name: Perform CodeQL Analysis
-        if: ${{env.CODE_QL_ANALYZE == 'true' }}
-        uses: github/codeql-action/analyze@v1
+      - name: Setting permissions
+        run: chmod +x ./gradlew
+      - name: Perform detekt analysis
+        run: ./gradlew detekt
