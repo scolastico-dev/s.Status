@@ -1,0 +1,59 @@
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    scheme: slate
+    primary: teal
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - toc.integrate
+    - navigation.instant
+    - navigation.tracking
+    - navigation.expand
+    - navigation.top
+    - content.code.annotate
+    - content.tabs.link
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/scolastico/s.Status
+plugins:
+  - search
+  - git-revision-date-localized:
+      fallback_to_build_date: true
+markdown_extensions:
+  - abbr
+  - pymdownx.snippets
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.smartsymbols
+  - attr_list
+  - md_in_html
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - def_list
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+copyright: 'Copyright &copy; 2022 - 2022 Joschua Becker EDV'
+site_name: s.Status
+repo_url: https://github.com/scolastico/s.Status
+repo_name: scolastico/s.Status

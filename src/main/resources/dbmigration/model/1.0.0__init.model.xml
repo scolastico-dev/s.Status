@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="check_response" identityType="external" pkName="pk_check_response">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="at" type="timestamp" notnull="true"/>
+            <column name="duration" type="integer" notnull="true"/>
+            <column name="reachable" type="boolean" defaultValue="false" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>
