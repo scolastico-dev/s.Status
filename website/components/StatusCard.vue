@@ -8,20 +8,23 @@
           @click="toggle"
         ></arrow-down-circle-icon>
         <p class="mx-2 flex-grow">content</p>
-        <sun-icon class="text-green-500"></sun-icon>
-        <cloud-drizzle-icon class="text-yellow-400"></cloud-drizzle-icon>
-        <cloud-lightning-icon class="text-red-600"></cloud-lightning-icon>
+        <sun-icon class="mx-2 text-green-500"></sun-icon>
+        <cloud-drizzle-icon class="mx-2 text-yellow-400 animate__animated animate__headShake animate__infinite"></cloud-drizzle-icon>
+        <cloud-lightning-icon class="mx-2 text-red-600 animate__animated animate__headShake animate__infinite"></cloud-lightning-icon>
       </div>
     </div>
-    <div ref="wrapper" class="relative w-full bg-stone-600 rounded-b overflow-hidden h-0" :class="{'transition-height': transition, 'duration-500': transition}">
-      <div ref="content" class="p-2">
+    <dropwdown-card ref="dropdown" class="-mt-2">
+      <div ref="wrapper" class="w-full bg-stone-600 rounded-b">
+        <div ref="content" class="p-2">
 
+        </div>
       </div>
-    </div>
+    </dropwdown-card>
   </div>
 </template>
 
 <script>
+import 'animate.css'
 import { ArrowDownCircleIcon, CloudLightningIcon, CloudDrizzleIcon, SunIcon} from 'vue-feather-icons'
 export default {
   name: 'SmallChartComponent',
@@ -38,29 +41,11 @@ export default {
     }
   },
   fetchOnServer: false,
-  fetch() {
-    window.addEventListener("resize", this.resize);
-  },
-  destroyed() {
-    window.removeEventListener("resize", this.resize);
-  },
   methods: {
     toggle() {
-      const wrapper = this.$refs.wrapper
+      if (this.$refs.dropdown.block) return
       this.dropdown = !this.dropdown
-      if (this.dropdown) {
-        wrapper.style.height = this.$refs.content.clientHeight + 'px'
-        wrapper.addEventListener('transitionend', this.transitionEnd)
-        this.transition = true
-      } else {
-        wrapper.style.height = '0'
-        this.transition = true
-      }
-    },
-    resize() {
-      if (this.dropdown) {
-        this.$refs.wrapper.style.height = this.$refs.content.clientHeight + 'px'
-      }
+      this.$refs.dropdown.toggleHide(!this.dropdown)
     },
     transitionEnd() {
       const wrapper = this.$refs.wrapper
