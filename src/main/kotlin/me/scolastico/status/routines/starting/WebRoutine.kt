@@ -2,8 +2,10 @@ package me.scolastico.status.routines.starting
 
 import io.ktor.network.tls.certificates.*
 import me.scolastico.status.Application
+import me.scolastico.status.web.Interface
 import me.scolastico.status.web.api.Get
 import me.scolastico.status.web.api.Status
+import me.scolastico.status.web.etc.CORS
 import me.scolastico.status.web.etc.OpenAPI
 import me.scolastico.tools.console.ConsoleLoadingAnimation
 import me.scolastico.tools.handler.ErrorHandler
@@ -58,14 +60,20 @@ class WebRoutine: Routine {
             Application.web = web
             web.registerModule(KtorGsonInstaller())
             web.registerModule(OpenAPI())
+            web.registerModule(CORS())
             web.registerModule(Get())
             web.registerModule(Status())
+            web.registerModule(Interface())
             ConsoleLoadingAnimation.disable()
             println(Ansi.ansi().fgGreen().a("[OK]").reset())
             if (Application.config.adminPanel) {
                 print("Installing admin panel... ")
                 ConsoleLoadingAnimation.enable()
-                AdminPanelInstaller.install(web)
+                AdminPanelInstaller.install(
+                    webserver = web,
+                    installWebsocketExtension = true,
+                    installGSONExtension = false
+                )
                 ConsoleLoadingAnimation.disable()
                 println(Ansi.ansi().fgGreen().a("[OK]").reset())
             }

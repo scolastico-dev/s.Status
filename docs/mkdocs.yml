@@ -53,7 +53,7 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-copyright: 'Copyright &copy; 2022 - 2022 Joschua Becker EDV'
+copyright: 'Copyright &copy; 2021 - 2022 Joschua Becker EDV'
 site_name: s.Status
 repo_url: https://github.com/scolastico/s.Status
 repo_name: scolastico/s.Status

@@ -1,6 +1,8 @@
 package me.scolastico.status.routines.starting
 
+import me.scolastico.status.console.ReloadCommand
 import me.scolastico.tools.console.ConsoleLoadingAnimation
+import me.scolastico.tools.console.ConsoleManager
 import me.scolastico.tools.handler.ErrorHandler
 import me.scolastico.tools.routine.Routine
 import me.scolastico.tools.routine.RoutineAnswer
@@ -15,6 +17,7 @@ class ConsoleRoutine: Routine {
         try {
             print("Registering console commands... ")
             ConsoleLoadingAnimation.enable()
+            ConsoleManager.registerCommand(ReloadCommand())
             ConsoleLoadingAnimation.disable()
             println(Ansi.ansi().fgGreen().a("[OK]").reset())
         } catch (e: Exception) {

@@ -179,3 +179,5 @@ database.sqlite
 dbConfig.json
 adminPanelSettings.json
 error.*
+web.files/
+check.conf/

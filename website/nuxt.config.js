@@ -39,7 +39,8 @@ export default {
   ],
 
   axios: {
-    baseURL: '/',
+    baseURL: process.env.BASE_API_URL,
+    browserBaseURL: process.env.BASE_API_URL,
   },
 
   build: {},

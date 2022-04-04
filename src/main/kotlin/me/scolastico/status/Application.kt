@@ -37,6 +37,7 @@ class Application private constructor() {
                 routines.add(ConfigRoutine())
                 routines.add(SentryRoutine())
                 routines.add(LoggingRoutine())
+                routines.add(WebFilesRoutine())
                 routines.add(DatabaseRoutine())
                 routines.add(ConsoleRoutine())
                 routines.add(WebRoutine())

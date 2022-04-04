@@ -25,6 +25,17 @@
 <script>
 export default {
   name: 'IndexPage',
+  fetchOnServer: false,
+  async asyncData(context) {
+    const status = await context.$axios.$get('status').catch(() => {
+      context.error(new Error("Failed to get API status."))
+      return {status: null}
+    })
+    return {status}
+  },
+  data: () => ({
+    status: {}
+  })
 }
 </script>
 
