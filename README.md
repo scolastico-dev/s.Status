@@ -7,6 +7,9 @@
 [![View Demo](https://img.shields.io/badge/-View%20Demo-green)](https://status.scolasti.co/)
 [![Documentation](https://img.shields.io/badge/-Documentation-green)](https://docs.scolasti.co/s.Status/main/)
 
+## Small Notice
+For all who think this repo is dead: A new rework in kotlin instead of java and a new ui in nuxt.js/vue is on the way! Checkout the [kotlin-upgrade](https://github.com/scolastico-dev/s.Status/tree/kotlin-upgrade) branch for all new updates! Release is planed for 01.05.2022 or eralyer!
+
 ## Introduction
 s.Status is a simple solution for monitoring pingable services such as database servers or http servers and providing a live status page. With the built in plugin system it is easy to add some functionalities like notification services.
 
