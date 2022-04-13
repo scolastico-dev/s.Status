@@ -177,7 +177,7 @@ docs/site/
 config.json
 database.sqlite
 dbConfig.json
-adminPanelSettings.json
+admin-config.json
 error.*
 web.files/
 check.conf/

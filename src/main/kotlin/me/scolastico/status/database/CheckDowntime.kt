@@ -6,16 +6,16 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class CheckResponse(
+data class CheckDowntime(
 
     var checkName: String,
-    var duration: Int,
+    var fromTime: Instant,
+    var untilTime: Instant?,
+    var messages: MutableList<String> = mutableListOf()
 
 ) {
 
     @Id
     lateinit var id: UUID
-
-    var at: Instant = Instant.now()
 
 }

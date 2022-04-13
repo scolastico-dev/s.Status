@@ -8,6 +8,7 @@ import java.net.Socket
 class PingPortCheck: StatusCheck<PingPortCheck.PingPortConfig> {
 
     override val name = "PingPort"
+    override val description = "Checks if a port is open."
     override val config = PingPortConfig()
 
     override fun check(config: CheckConfiguration<PingPortConfig>) : Int {
@@ -28,6 +29,6 @@ class PingPortCheck: StatusCheck<PingPortCheck.PingPortConfig> {
         }
     }
 
-    data class PingPortConfig(val ip: String = "example.com", val port: Int = 80)
+    data class PingPortConfig(val ip: String = "93.184.216.34", val port: Int = 80)
 
 }

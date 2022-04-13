@@ -29,12 +29,12 @@ class Get {
                                     data = listOf(
                                         APICheckResponse(
                                             at = 0,
-                                            duration = 123,
+                                            duration = "123",
                                             reachable = true,
                                         ),
                                         APICheckResponse(
                                             at = 100,
-                                            duration = -1,
+                                            duration = "-1",
                                             reachable = false,
                                         )
                                     ),
@@ -71,7 +71,7 @@ class Get {
 
     data class APICheckResponse(
         val at: Long,
-        val duration: Int,
+        val duration: String,
         val reachable: Boolean
     )
 }

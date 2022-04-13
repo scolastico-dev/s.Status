@@ -7,6 +7,7 @@ interface StatusCheck<C> {
     fun check(config: CheckConfiguration<C>): Int
 
     val name: String
+    val description: String
     val config: C
 
 }

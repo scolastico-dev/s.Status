@@ -1,6 +1,7 @@
 @file:Suppress("WildcardImport")
 package me.scolastico.status
 
+import me.scolastico.status.checks.StatusCheck
 import me.scolastico.status.dataholders.Config
 import me.scolastico.status.routines.starting.*
 import me.scolastico.tools.console.ConsoleLoadingAnimation
@@ -20,6 +21,8 @@ class Application private constructor() {
         lateinit var web: WebserverManager
         lateinit var configHandler:ConfigHandler<Config>
         lateinit var config:Config
+        var checkTypes = mutableListOf<StatusCheck<Any>>()
+        var checks = mutableMapOf<String, Pair<String, Any>>()
         val version:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/VERSION")
         val branch:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/BRANCH")
         val commit:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/COMMIT")
@@ -37,6 +40,8 @@ class Application private constructor() {
                 routines.add(ConfigRoutine())
                 routines.add(SentryRoutine())
                 routines.add(LoggingRoutine())
+                routines.add(RegisterChecksRoutine())
+                routines.add(LoadChecksRoutine())
                 routines.add(WebFilesRoutine())
                 routines.add(DatabaseRoutine())
                 routines.add(ConsoleRoutine())

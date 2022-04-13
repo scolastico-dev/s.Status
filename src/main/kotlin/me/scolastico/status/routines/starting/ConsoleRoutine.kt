@@ -1,6 +1,6 @@
 package me.scolastico.status.routines.starting
 
-import me.scolastico.status.console.ReloadCommand
+import me.scolastico.status.console.*
 import me.scolastico.tools.console.ConsoleLoadingAnimation
 import me.scolastico.tools.console.ConsoleManager
 import me.scolastico.tools.handler.ErrorHandler
@@ -17,7 +17,21 @@ class ConsoleRoutine: Routine {
         try {
             print("Registering console commands... ")
             ConsoleLoadingAnimation.enable()
+            ConsoleManager.registerCommand(ConvertDowntimeCommand())
+            ConsoleManager.registerCommand(CreateCheckCommand())
+            ConsoleManager.registerCommand(CreateMaintenanceCommand())
+            ConsoleManager.registerCommand(DeleteCheckCommand())
+            ConsoleManager.registerCommand(DeleteDowntimeCommand())
+            ConsoleManager.registerCommand(DeleteMaintenanceCommand())
+            ConsoleManager.registerCommand(DisableCheckCommand())
+            ConsoleManager.registerCommand(EnableCheckCommand())
+            ConsoleManager.registerCommand(ListChecksCommand())
+            ConsoleManager.registerCommand(ListCheckTypesCommand())
+            ConsoleManager.registerCommand(ListDowntimesCommand())
+            ConsoleManager.registerCommand(ListMaintenancesCommand())
             ConsoleManager.registerCommand(ReloadCommand())
+            ConsoleManager.registerCommand(UpdateDowntimeCommand())
+            ConsoleManager.registerCommand(UpdateMaintenanceCommand())
             ConsoleLoadingAnimation.disable()
             println(Ansi.ansi().fgGreen().a("[OK]").reset())
         } catch (e: Exception) {
