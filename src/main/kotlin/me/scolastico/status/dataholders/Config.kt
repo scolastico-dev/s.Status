@@ -17,6 +17,7 @@ data class Config(
     var adminPanel: Boolean = false,
     var debug: Boolean = false,
     var cors: List<String> = listOf("*"),
-    var checks: Map<String, String> = mapOf(),
+    var checks: MutableMap<String, String> = mutableMapOf(),
+    var enabledChecks: MutableList<String> = mutableListOf(),
 
-    )
+)

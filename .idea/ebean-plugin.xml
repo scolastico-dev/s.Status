@@ -2,6 +2,6 @@
 <project version="4">
   <component name="ebeanPlugin11">
     <option name="enabled" value="true" />
-    <option name="agentPath" value="C:\Users\josch\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\213.7172.25.plugins\ebean-idea\lib\ebean-agent-12.12.1.jar" />
+    <option name="agentPath" value="C:\Users\josch\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\221.5080.210.plugins\ebean-idea\lib\ebean-agent-13.3.0.jar" />
   </component>
 </project>

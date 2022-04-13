@@ -9,6 +9,7 @@ import javax.net.ssl.HttpsURLConnection
 class HttpCheck: StatusCheck<HttpCheck.HttpCheckConfig> {
 
     override val name = "HTTP"
+    override val description = "Checks if a HTTP endpoint is reachable."
     override val config = HttpCheckConfig()
 
     override fun check(config: CheckConfiguration<HttpCheckConfig>): Int {

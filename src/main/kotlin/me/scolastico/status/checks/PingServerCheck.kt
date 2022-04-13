@@ -5,7 +5,8 @@ import java.net.InetAddress
 
 class PingServerCheck: StatusCheck<PingServerCheck.PingServerConfig>  {
 
-    override val name = "PingPort"
+    override val name = "PingServer"
+    override val description = "Checks if the server is reachable. (Preferred with ICMP)"
     override val config = PingServerConfig()
 
     override fun check(config: CheckConfiguration<PingServerConfig>) : Int {
