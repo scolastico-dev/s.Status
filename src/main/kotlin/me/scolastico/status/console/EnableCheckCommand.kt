@@ -1,8 +1,7 @@
 package me.scolastico.status.console
 
 import me.scolastico.status.Application
-import me.scolastico.status.dataholders.CheckConfiguration
-import me.scolastico.tools.handler.ConfigHandler
+import me.scolastico.status.helper.CheckConfigurationLoader.Companion.load
 import org.fusesource.jansi.Ansi
 import picocli.CommandLine
 
@@ -33,15 +32,12 @@ class EnableCheckCommand: Runnable {
         var found = false
         for (check in Application.checkTypes) {
             if (check.name == Application.config.checks[name]!!) {
-                val handler = ConfigHandler(CheckConfiguration(specific = check.config), "check.conf/$name.json")
-                if (!handler.checkIfExists()) {
-                    println(Ansi.ansi().fgRed().a("Error: ").fgDefault().a("Check configuration not found."))
-                    return
+                try {
+                    Application.checks[name] = Pair(check.name, load(check, name))
+                    found = true
+                } catch (e: IllegalArgumentException) {
+                    println(Ansi.ansi().fgRed().a("Error: ").fgDefault().a(e.message))
                 }
-                val config = handler.loadConfig()
-                if (Application.config.debug) handler.storeConfig(config)
-                Application.checks[name] = Pair(check.name, config)
-                found = true
             }
         }
         if (!found) {

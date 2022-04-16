@@ -30,8 +30,7 @@ class CreateMaintenanceCommand: Runnable {
             "Valid values are:",
             "  - now: Create the maintenance now.",
             "  - <unix timestamp>: Create the maintenance at the given unix timestamp.",
-            "  - <time>: Create the maintenance at the specified time." +
-                    "(The format needs to be DD/MM/YYYY HH:MM:SS and your local timezone is used.)"
+            "  - <time>: Create the maintenance at the specified time."
         ]
     )
     lateinit var from: String
@@ -51,8 +50,7 @@ class CreateMaintenanceCommand: Runnable {
             "Valid values are:",
             "  - now: Create the maintenance now.",
             "  - <unix timestamp>: Create the maintenance at the given unix timestamp.",
-            "  - <time>: Create the maintenance at the specified time." +
-                    "(The format needs to be DD/MM/YYYY HH:MM:SS and your local timezone is used.)"
+            "  - <time>: Create the maintenance at the specified time."
         ]
     )
     var until: String? = null

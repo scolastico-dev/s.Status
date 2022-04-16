@@ -28,8 +28,8 @@ class HttpCheck: StatusCheck<HttpCheck.HttpCheckConfig> {
                 url.openConnection() as HttpURLConnection
             }
             connection.requestMethod = data.method.value
-            connection.connectTimeout = timeout
-            connection.readTimeout = timeout
+            connection.connectTimeout = timeout*1000
+            connection.readTimeout = timeout*1000
             for (header in data.headers) {
                 connection.setRequestProperty(header.key, header.value)
             }

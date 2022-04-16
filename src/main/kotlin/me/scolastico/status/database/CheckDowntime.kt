@@ -1,5 +1,7 @@
 package me.scolastico.status.database
 
+import io.ebean.annotation.DbArray
+import me.scolastico.status.Application
 import java.time.Instant
 import java.util.*
 import javax.persistence.Entity
@@ -10,8 +12,11 @@ data class CheckDowntime(
 
     var checkName: String,
     var fromTime: Instant,
-    var untilTime: Instant?,
-    var messages: MutableList<String> = mutableListOf()
+    var untilTime: Instant? = null,
+    var yellow: Boolean = false,
+
+    @DbArray
+    var messages: MutableList<String> = mutableListOf(Application.config.defaultDowntimeMessage)
 
 ) {
 

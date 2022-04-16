@@ -78,5 +78,11 @@ class DateHelper private constructor() {
             return "$hours:$minutes:$seconds"
         }
 
+        fun getUTCTime(instant: Instant): String {
+            val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            df.timeZone = TimeZone.getTimeZone("UTC")
+            return df.format(Date.from(instant))
+        }
+
     }
 }

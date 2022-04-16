@@ -2,12 +2,14 @@
 package me.scolastico.status
 
 import me.scolastico.status.checks.StatusCheck
+import me.scolastico.status.dataholders.CheckConfiguration
 import me.scolastico.status.dataholders.Config
+import me.scolastico.status.routines.scheduler.CheckRoutine
+import me.scolastico.status.routines.scheduler.CleanupRoutine
 import me.scolastico.status.routines.starting.*
 import me.scolastico.tools.console.ConsoleLoadingAnimation
 import me.scolastico.tools.handler.ConfigHandler
 import me.scolastico.tools.handler.ErrorHandler
-import me.scolastico.tools.routine.Routine
 import me.scolastico.tools.routine.RoutineManager
 import me.scolastico.tools.simplified.SimplifiedResourceFileReader
 import me.scolastico.tools.web.WebserverManager
@@ -22,7 +24,8 @@ class Application private constructor() {
         lateinit var configHandler:ConfigHandler<Config>
         lateinit var config:Config
         var checkTypes = mutableListOf<StatusCheck<Any>>()
-        var checks = mutableMapOf<String, Pair<String, Any>>()
+        var checks = mutableMapOf<String, Pair<String, CheckConfiguration<Any>>>()
+        var schedulerRoutines = mutableListOf(CheckRoutine(), CleanupRoutine())
         val version:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/VERSION")
         val branch:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/BRANCH")
         val commit:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/COMMIT")
@@ -34,20 +37,22 @@ class Application private constructor() {
         @Suppress("TooGenericExceptionCaught")
         fun main(args: Array<String>) {
             try {
-                val routines = ArrayList<Routine>()
-                routines.add(ErrorRoutine())
-                routines.add(HeaderRoutine())
-                routines.add(ConfigRoutine())
-                routines.add(SentryRoutine())
-                routines.add(LoggingRoutine())
-                routines.add(RegisterChecksRoutine())
-                routines.add(LoadChecksRoutine())
-                routines.add(WebFilesRoutine())
-                routines.add(DatabaseRoutine())
-                routines.add(ConsoleRoutine())
-                routines.add(WebRoutine())
-                routines.add(FinishRoutine())
-                val manager = RoutineManager(routines)
+                val manager = RoutineManager(listOf(
+                    ErrorRoutine(),
+                    HeaderRoutine(),
+                    ConfigRoutine(),
+                    SentryRoutine(),
+                    LoggingRoutine(),
+                    RegisterChecksRoutine(),
+                    LoadChecksRoutine(),
+                    WebFilesRoutine(),
+                    DatabaseRoutine(),
+                    ConsoleRoutine(),
+                    WebRoutine(),
+                    SchedulerRoutine(),
+                    AutoShutdownRoutine(),
+                    FinishRoutine()
+                ))
                 manager.startNotAsynchronously()
             } catch (e: Exception) {
                 try {
