@@ -6,16 +6,16 @@ import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class CheckMaintenance(
+data class StartedActions(
 
-    var checkName: String,
-    var fromTime: Instant,
-    var untilTime: Instant? = null,
-    var message: String
+    val checkName: String,
+    val action: String
 
 ) {
 
     @Id
     lateinit var id: UUID
+
+    var at: Instant = Instant.now()
 
 }

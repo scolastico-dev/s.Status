@@ -17,6 +17,7 @@ class ConsoleRoutine: Routine {
         try {
             print("Registering console commands... ")
             ConsoleLoadingAnimation.enable()
+            ConsoleManager.registerCommand(CloseDowntimeCommand())
             ConsoleManager.registerCommand(ConvertDowntimeCommand())
             ConsoleManager.registerCommand(CreateCheckCommand())
             ConsoleManager.registerCommand(CreateMaintenanceCommand())

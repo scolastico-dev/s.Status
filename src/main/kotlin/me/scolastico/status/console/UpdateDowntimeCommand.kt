@@ -1,6 +1,7 @@
 package me.scolastico.status.console
 
 import io.ebean.DB
+import me.scolastico.status.Application
 import me.scolastico.status.database.CheckDowntime
 import me.scolastico.status.helper.DateHelper
 import org.fusesource.jansi.Ansi
@@ -46,6 +47,18 @@ class UpdateDowntimeCommand: Runnable {
     )
     var dontPrefixTime: Boolean = false
 
+    @CommandLine.Option(
+        names = ["--yellow"],
+        description = ["Set the downtime status to yellow."]
+    )
+    var yellow: Boolean = false
+
+    @CommandLine.Option(
+        names = ["--red"],
+        description = ["Set the downtime status to red."]
+    )
+    var red: Boolean = false
+
     @CommandLine.Parameters(
         index = "0",
         description = [
@@ -56,7 +69,7 @@ class UpdateDowntimeCommand: Runnable {
     lateinit var id: String
 
     override fun run() {
-        if (from == null && until == null && message == null && !delMessages) {
+        if (from == null && until == null && message == null && !delMessages && !yellow && !red) {
             println(Ansi.ansi().fgRed().a("Error: ").fgDefault().a("You must specify at least one option."))
             return
         }
@@ -92,10 +105,25 @@ class UpdateDowntimeCommand: Runnable {
         }
         if (delMessages) {
             downtime.messages.clear()
+            downtime.messages.add(Application.config.defaultDowntimeMessage)
         }
         if (message != null) {
             val time = if (dontPrefixTime) "" else "[%time%${System.currentTimeMillis()/1000}%] "
             downtime.messages.add(time + message!!)
+        }
+        if (yellow) {
+            if (downtime.yellow) {
+                println(Ansi.ansi().fgYellow().a("Warning: ").fgDefault().a("The downtime status is already yellow."))
+            } else {
+                downtime.yellow = true
+            }
+        }
+        if (red) {
+            if (!downtime.yellow) {
+                println(Ansi.ansi().fgYellow().a("Warning: ").fgDefault().a("The downtime status is already red."))
+            } else {
+                downtime.yellow = false
+            }
         }
         DB.save(downtime)
         println(Ansi.ansi().fgGreen().a("Success: ").fgDefault().a("Downtime updated."))
