@@ -1,4 +1,14 @@
 -- apply changes
+create table average_cache (
+  id                            varchar2(40) not null,
+  check_name                    varchar2(255) not null,
+  uptime                        number(3) not null,
+  duration                      number(10) not null,
+  at                            timestamp not null,
+  timezone                      number(2) not null,
+  constraint pk_average_cache primary key (id)
+);
+
 create table check_downtime (
   id                            varchar2(40) not null,
   check_name                    varchar2(255) not null,

@@ -84,5 +84,16 @@ class DateHelper private constructor() {
             return df.format(Date.from(instant))
         }
 
+        fun getMidnight(timezone: Int): Long {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.HOUR_OF_DAY, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+            cal.set(Calendar.DST_OFFSET, 0)
+            cal.set(Calendar.ZONE_OFFSET, timezone * 3600000)
+            return cal.timeInMillis
+        }
+
     }
 }

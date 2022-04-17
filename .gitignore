@@ -176,6 +176,7 @@ docs/site/
 
 config.json
 database.sqlite
+database.sqlite-journal
 dbConfig.json
 admin-config.json
 error.*
