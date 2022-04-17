@@ -2,6 +2,7 @@ package me.scolastico.status.console
 
 import io.ebean.DB
 import me.scolastico.status.Application
+import me.scolastico.status.database.AverageCache
 import me.scolastico.status.database.CheckDowntime
 import me.scolastico.status.database.CheckMaintenance
 import me.scolastico.status.database.CheckResponse
@@ -36,6 +37,7 @@ class DeleteCheckCommand: Runnable {
         DB.createQuery(CheckResponse::class.java).where().eq("checkName", name).delete()
         DB.createQuery(CheckMaintenance::class.java).where().eq("checkName", name).delete()
         DB.createQuery(CheckDowntime::class.java).where().eq("checkName", name).delete()
+        DB.createQuery(AverageCache::class.java).where().eq("checkName", name).delete()
         Application.checks.remove(name)
         Application.config.checks.remove(name)
         Application.config.enabledChecks.remove(name)

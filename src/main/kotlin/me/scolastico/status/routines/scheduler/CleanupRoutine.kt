@@ -2,6 +2,7 @@ package me.scolastico.status.routines.scheduler
 
 import io.ebean.DB
 import me.scolastico.status.Application
+import me.scolastico.status.database.AverageCache
 import me.scolastico.status.database.CheckDowntime
 import me.scolastico.status.database.CheckMaintenance
 import me.scolastico.status.database.CheckResponse
@@ -37,6 +38,12 @@ class CleanupRoutine: Routine {
                     .isNotNull("untilTime")
                     .and()
                     .lt("untilTime", time)
+                    .delete()
+                DB.createQuery(AverageCache::class.java)
+                    .where()
+                    .eq("checkName", name)
+                    .and()
+                    .lt("at", time.minusSeconds(86400000L*2))
                     .delete()
             } catch (e: Exception) {
                 ErrorHandler.handle(e)

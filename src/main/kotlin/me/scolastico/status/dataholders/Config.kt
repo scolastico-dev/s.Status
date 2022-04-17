@@ -18,6 +18,7 @@ data class Config(
     var debug: Boolean = false,
     var autoShutdown: Int = 0,
     var defaultDowntimeMessage: String = "Detected issues with this service.",
+    var detailsHours: Int = 6,
     var cors: List<String> = listOf("*"),
     var checks: MutableMap<String, String> = mutableMapOf(),
     var enabledChecks: MutableList<String> = mutableListOf(),

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
     <changeSet type="apply">
+        <createTable name="average_cache" identityType="external" pkName="pk_average_cache">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="uptime" type="integer(3)" notnull="true"/>
+            <column name="duration" type="integer" notnull="true"/>
+            <column name="at" type="timestamp" notnull="true"/>
+            <column name="timezone" type="integer(2)" notnull="true"/>
+        </createTable>
         <createTable name="check_downtime" identityType="external" pkName="pk_check_downtime">
             <column name="id" type="uuid" primaryKey="true" identity="true"/>
             <column name="check_name" type="varchar" notnull="true"/>

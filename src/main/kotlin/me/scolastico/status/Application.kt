@@ -6,6 +6,7 @@ import me.scolastico.status.dataholders.CheckConfiguration
 import me.scolastico.status.dataholders.Config
 import me.scolastico.status.routines.scheduler.CheckRoutine
 import me.scolastico.status.routines.scheduler.CleanupRoutine
+import me.scolastico.status.routines.scheduler.GenerateCacheRoutine
 import me.scolastico.status.routines.starting.*
 import me.scolastico.tools.console.ConsoleLoadingAnimation
 import me.scolastico.tools.handler.ConfigHandler
@@ -25,7 +26,7 @@ class Application private constructor() {
         lateinit var config:Config
         var checkTypes = mutableListOf<StatusCheck<Any>>()
         var checks = mutableMapOf<String, Pair<String, CheckConfiguration<Any>>>()
-        var schedulerRoutines = mutableListOf(CheckRoutine(), CleanupRoutine())
+        var schedulerRoutines = mutableListOf(CheckRoutine(), CleanupRoutine(), GenerateCacheRoutine())
         val version:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/VERSION")
         val branch:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/BRANCH")
         val commit:String = SimplifiedResourceFileReader.getInstance().getStringFromResources("staticVars/COMMIT")
@@ -47,6 +48,7 @@ class Application private constructor() {
                     LoadChecksRoutine(),
                     WebFilesRoutine(),
                     DatabaseRoutine(),
+                    CacheRoutine(),
                     ConsoleRoutine(),
                     WebRoutine(),
                     SchedulerRoutine(),
