@@ -4,6 +4,7 @@ import io.ktor.network.tls.certificates.*
 import me.scolastico.status.Application
 import me.scolastico.status.web.Interface
 import me.scolastico.status.web.api.Get
+import me.scolastico.status.web.api.Hash
 import me.scolastico.status.web.api.Status
 import me.scolastico.status.web.etc.CORS
 import me.scolastico.status.web.etc.OpenAPI
@@ -61,6 +62,7 @@ class WebRoutine: Routine {
             web.registerModule(KtorGsonInstaller())
             web.registerModule(OpenAPI())
             web.registerModule(CORS())
+            web.registerModule(Hash())
             web.registerModule(Get())
             web.registerModule(Status())
             web.registerModule(Interface())

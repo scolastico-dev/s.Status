@@ -43,7 +43,7 @@ class CleanupRoutine: Routine {
                     .where()
                     .eq("checkName", name)
                     .and()
-                    .lt("at", time.minusSeconds(86400000L*2))
+                    .lt("at", time.minusSeconds(86400000L*3))
                     .delete()
             } catch (e: Exception) {
                 ErrorHandler.handle(e)

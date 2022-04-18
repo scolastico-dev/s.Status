@@ -27,17 +27,24 @@ class Status {
                                 "IN-DEV",
                                 "IN-DEV",
                                 "",
-                                listOf("some check identifier"),
+                                listOf(CheckInformation("some check identifier", 30)),
+                                60,
                                 0L
                             ))
                         )
                     )
                 ) {
+                    val checks = mutableListOf<CheckInformation>()
+                    for ((checkName, data) in app.checks) checks.add(CheckInformation(
+                        name = checkName,
+                        keep = data.second.keep
+                    ))
                     call.respond(HttpStatusCode.OK, StatusResponse(
                         app.version,
                         app.commit,
                         app.branch,
-                        app.config.checks.keys.toList(),
+                        checks,
+                        app.config.refreshInterval,
                         System.currentTimeMillis()/1000
                     ))
                 }
@@ -49,7 +56,14 @@ class Status {
         val version: String,
         val commit: String,
         val branch: String,
-        val checks: List<String>,
+        val checks: List<CheckInformation>,
+        val refreshInterval: Int,
         val timestamp: Long,
     )
+
+    data class CheckInformation(
+        val name: String,
+        val keep: Int,
+    )
+
 }

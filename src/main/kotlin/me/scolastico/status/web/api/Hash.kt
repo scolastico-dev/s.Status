@@ -8,23 +8,25 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import me.scolastico.status.dataholders.CheckApiData
 import me.scolastico.status.dataholders.ErrorResponse
 import me.scolastico.status.helper.WebHelper
 import me.scolastico.tools.handler.ErrorHandler
 import me.scolastico.tools.simplified.PBGson
 import me.scolastico.tools.web.WebserverRegistration
+import java.math.BigInteger
+import java.security.MessageDigest
 
-class Get {
+class Hash {
 
     @WebserverRegistration
     fun Application.modulesGetAPI() {
         routing {
-            route("/api/get/{check}/{timezone}") {
+            route("/api/hash/{check}/{timezone}") {
                 notarizedGet(
-                    GetInfo<Unit, GetResponse>(
-                        summary = "Get the status of a check.",
-                        description = "This API provides the current information about a check.",
+                    GetInfo<Unit, HashResponse>(
+                        summary = "Get only the hash from the response of an '/api/get/{check}/{timezone}' call.",
+                        description = "This API provides the hash of the response from the '/api/get/{check}/{timezone}' api." +
+                                "This api is usefully to test if the response has changed or is still the same.",
                         tags = setOf("General"),
                         parameterExamples = setOf(
                             ParameterExample(
@@ -42,13 +44,8 @@ class Get {
                             status = HttpStatusCode.OK,
                             description = "",
                             examples = mapOf(
-                                "success" to GetResponse(
-                                    data = CheckApiData(
-                                        averages = listOf(),
-                                        newest = listOf(),
-                                        downtimes = listOf(),
-                                        maintenances = listOf()
-                                    ),
+                                "success" to HashResponse(
+                                    hash = "example-hash-ABCDEFGHIJKLMNOPQRSTUVWXYZ",
                                     timestamp = 0L
                                 )
                             )
@@ -59,11 +56,13 @@ class Get {
                     try {
                         val response = WebHelper.getData(call)
                         if (response != null) {
-                            val json = PBGson.s().toJson(GetResponse(
-                                data = response,
-                                timestamp = System.currentTimeMillis()/1000
+                            val json = PBGson.s().toJson(response)
+                            val md5 = MessageDigest.getInstance("MD5").digest(json.toByteArray())
+                            val hash = BigInteger(1, md5).toString(16)
+                            call.respond(HttpStatusCode.OK, HashResponse(
+                                hash,
+                                System.currentTimeMillis()/1000
                             ))
-                            call.respond(HttpStatusCode.OK, json)
                         }
                     } catch (e: Exception) {
                         ErrorHandler.handle(e)
@@ -79,9 +78,9 @@ class Get {
         }
     }
 
-    data class GetResponse(
-        val data: CheckApiData,
-        val timestamp: Long,
+    data class HashResponse(
+        val hash: String,
+        val timestamp: Long
     )
 
 }

@@ -11,7 +11,7 @@ class CacheHelper private constructor() {
 
         fun generateMissing(name: String, days: Int) {
             val currentTime = System.currentTimeMillis()
-            for (day in 1 .. days) for (timezone in -11 .. 14) {
+            for (day in 0 .. days + 1) for (timezone in -11 .. 14) {
                 val endTime = getMidnight(timezone) - (day * 86400000L) + 86400000
                 if (endTime > currentTime) continue
                 val count = DB.createQuery(AverageCache::class.java)
