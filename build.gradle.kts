@@ -86,4 +86,6 @@ dependencies {
     implementation("io.bkbn:kompendium-core:2.3.1")
     implementation("io.bkbn:kompendium-swagger-ui:2.3.1")
     implementation("ch.qos.logback:logback-core:1.2.11")
+    implementation("rome:rome:1.0")
+    implementation("io.github.reactivecircus.cache4k:cache4k:0.5.0")
 }

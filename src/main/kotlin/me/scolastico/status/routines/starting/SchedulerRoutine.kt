@@ -25,7 +25,7 @@ class SchedulerRoutine: Routine {
                     manager.startNotAsynchronously()
                     running = false
                 }
-            }, 10*1000, 1000)
+            }, 10000, Application.config.scheduler*1000L)
             ConsoleLoadingAnimation.disable()
             println(Ansi.ansi().fgGreen().a("[OK]").reset())
         } catch (e: Exception) {

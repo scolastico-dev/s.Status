@@ -34,7 +34,7 @@ class OpenAPI {
                     ),
                     contact = Contact(
                         name = "s.Status by Joschua Becker EDV",
-                        url = URI("https://annoy-others.com/help")
+                        url = URI("https://github.com/scolastico-dev/s.Status")
                     ),
                 ),
                 servers = mutableListOf(
