@@ -1,4 +1,6 @@
 export default {
+  loading: '~/components/LoadingBar.vue',
+
   ssr: false,
 
   target: 'static',
@@ -17,9 +19,14 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  css: [],
+  css: [
+    '~/assets/global.css'
+  ],
 
-  plugins: [],
+  plugins: [
+    '~/plugins/TimeHelper.js',
+    '~/plugins/VShowSlide.js',
+  ],
 
   components: [
     '~/components'

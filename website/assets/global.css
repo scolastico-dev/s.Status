@@ -1,0 +1,7 @@
+.background {
+  @apply bg-gradient-to-br from-gray-700 to-gray-800;
+}
+
+body, #body-wrapper, #loading-wrapper {
+  @apply min-h-screen min-w-full
+}

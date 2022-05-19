@@ -6,6 +6,7 @@ data class CheckApiData(
     val newest: List<CheckData>,
     val downtimes: List<DowntimeData>,
     val maintenances: List<MaintenanceData>,
+    val name: String,
 
 ) {
 
