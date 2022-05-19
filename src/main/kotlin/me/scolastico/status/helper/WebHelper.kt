@@ -135,7 +135,8 @@ class WebHelper private constructor() {
                 averages = averages,
                 newest = defaults.first,
                 downtimes = defaults.second,
-                maintenances = defaults.third
+                maintenances = defaults.third,
+                name= app.checks[checkName]!!.second.displayName
             )
         }
     }

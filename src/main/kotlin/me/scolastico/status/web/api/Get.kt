@@ -47,7 +47,8 @@ class Get {
                                         averages = listOf(),
                                         newest = listOf(),
                                         downtimes = listOf(),
-                                        maintenances = listOf()
+                                        maintenances = listOf(),
+                                        name = "fancy example name",
                                     ),
                                     timestamp = 0L
                                 )

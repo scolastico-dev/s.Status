@@ -5,6 +5,7 @@ import me.scolastico.status.helper.Trigger
 
 data class CheckConfiguration<C>(
 
+    var displayName: String = "Display Name",
     var timeout: Int = 10,
     var every: Int = 300,
     var keep: Int = 30,
