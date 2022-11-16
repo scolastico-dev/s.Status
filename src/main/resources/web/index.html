@@ -3,26 +3,28 @@
 </h1>
 <p>
   IN-DEV versions are not meant to use the web interface.
-  If you want to use the web interface, you need to start the interface in an
+  If you want to use the web interface, you need to start the interface in a
   separate process.
 </p>
 <h3>(Recommended) How to start the <em>LIVE</em> web interface:</h3>
 <ol>
   <li>Install the latest LTS (currently 16.14.2) version Node.js and NPM on your machine (<a href="https://nodejs.org/en/download/">download</a>).</li>
+  <li>Install the PNPM with the command "npm install -g pnpm"</li>
   <li>Go into the "website" folder in the root directory of the project.</li>
-  <li>Download and install all dependencies with the command "npm install"</li>
+  <li>Download and install all dependencies with the command "pnpm i"</li>
   <li>Copy the "default.env" file as an ".env" file.</li>
   <li>If you are not using the default port for the api (the kotlin/java application) you need to change the port in the ".env" file.</li>
-  <li>Start the server with the command "npm run dev"</li>
+  <li>Start the server with the command "pnpm dev"</li>
   <li>Open the web interface in your browser: <a href="http://localhost:3000">http://localhost:3000</a></li>
 </ol>
 <h3>How to build the web interface into the API:</h3>
 <ol>
   <li>Install the latest LTS (currently 16.14.2) version Node.js and NPM on your machine (<a href="https://nodejs.org/en/download/">download</a>).</li>
+  <li>Install the PNPM with the command "npm install -g pnpm"</li>
   <li>Go into the "website" folder in the root directory of the project.</li>
-  <li>Download and install all dependencies with the command "npm install"</li>
+  <li>Download and install all dependencies with the command "pnpm i"</li>
   <li>Copy the "live.env" file as an ".env" file.</li>
-  <li>Build & Generate the static interface files with the command "npm run generate"</li>
+  <li>Build & Generate the static interface files with the command "pnpm build"</li>
   <li>The next steps should be done from the root directory of this project.</li>
   <li>Copy the files from the "website/dist/" folder into the "src/main/resources/web/" folder and overwrite the "index.html" file (this file) in it.</li>
   <li>Delete the "web.files/" folder.</li>
