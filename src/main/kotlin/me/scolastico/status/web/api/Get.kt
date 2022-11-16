@@ -48,7 +48,6 @@ class Get {
                                         newest = listOf(),
                                         downtimes = listOf(),
                                         maintenances = listOf(),
-                                        name = "fancy example name",
                                     ),
                                     timestamp = 0L
                                 )

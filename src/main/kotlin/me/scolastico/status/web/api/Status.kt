@@ -7,6 +7,8 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import me.scolastico.status.helper.StatusString
+import me.scolastico.status.helper.WebHelper
 import me.scolastico.tools.web.WebserverRegistration
 
 class Status {
@@ -27,7 +29,12 @@ class Status {
                                 "IN-DEV",
                                 "IN-DEV",
                                 "",
-                                listOf(CheckInformation("some check identifier", 30)),
+                                listOf(CheckInformation(
+                                    "some check identifier",
+                                    30,
+                                    StatusString.ONLINE,
+                                    "fancy example name"
+                                )),
                                 60,
                                 0L
                             ))
@@ -37,7 +44,9 @@ class Status {
                     val checks = mutableListOf<CheckInformation>()
                     for ((checkName, data) in app.checks) checks.add(CheckInformation(
                         name = checkName,
-                        keep = data.second.keep
+                        keep = data.second.keep,
+                        status = WebHelper.getStatus(checkName),
+                        displayName = data.second.displayName
                     ))
                     call.respond(HttpStatusCode.OK, StatusResponse(
                         app.version,
@@ -64,6 +73,8 @@ class Status {
     data class CheckInformation(
         val name: String,
         val keep: Int,
+        val status: StatusString,
+        val displayName: String,
     )
 
 }

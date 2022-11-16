@@ -136,8 +136,36 @@ class WebHelper private constructor() {
                 newest = defaults.first,
                 downtimes = defaults.second,
                 maintenances = defaults.third,
-                name= app.checks[checkName]!!.second.displayName
             )
+        }
+
+        fun getStatus(checkName: String): StatusString {
+            val currentTime = Instant.now()
+            val maintenance = DB.createQuery(CheckMaintenance::class.java)
+                .where()
+                .eq("checkName", checkName)
+                .and()
+                .le("fromTime", currentTime)
+                .and()
+                .or()
+                .isNull("untilTime")
+                .gt("untilTime", currentTime)
+                .setMaxRows(1)
+                .findList()
+            if (maintenance.isNotEmpty()) return StatusString.MAINTENANCE
+            val downtime = DB.createQuery(CheckDowntime::class.java)
+                .where()
+                .eq("checkName", checkName)
+                .and()
+                .le("fromTime", currentTime)
+                .and()
+                .or()
+                .isNull("untilTime")
+                .gt("untilTime", currentTime)
+                .setMaxRows(1)
+                .findList()
+            if (downtime.isNotEmpty()) return StatusString.OFFLINE
+            return StatusString.ONLINE
         }
     }
 }
