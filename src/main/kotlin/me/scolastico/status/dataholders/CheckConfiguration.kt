@@ -9,6 +9,16 @@ data class CheckConfiguration<C>(
     var timeout: Int = 10,
     var every: Int = 300,
     var keep: Int = 30,
+    var chartColorsResponse: MutableMap<String, String> = mutableMapOf(
+        "0" to "#0E9F6E",
+        "600" to "#FACA15",
+        "1200" to "#C81E1E"
+    ),
+    var chartColorsUptime: MutableMap<String, String> = mutableMapOf(
+        "0" to "#C81E1E",
+        "90" to "#FACA15",
+        "98" to "#0E9F6E"
+    ),
     var actions: List<AutomatedAction> = listOf(
         AutomatedAction(
             Trigger.DOWNTIME_ONLINE_AGAIN,
@@ -38,4 +48,4 @@ data class CheckConfiguration<C>(
     ),
     var specific: C,
 
-)
+    )
