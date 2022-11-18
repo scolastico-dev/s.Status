@@ -1,7 +1,7 @@
 <template>
   <div class="card-header" @click="$emit('click')">
     <h2
-        class="flex-grow transition-colors duration-500"
+        class="flex-grow transition-colors duration-500 text-xl"
         :class="{'card-loading': blink}"
     >
       {{ service.displayName }}

@@ -11,7 +11,7 @@
 import CardHeader from '@/CardHeader.vue'
 import DropDown from '@/DropDown.vue'
 import CardBody from '@/CardBody.vue'
-
+import md5 from 'md5'
 export default {
   components: {CardBody, DropDown, CardHeader},
   props: {
@@ -25,6 +25,7 @@ export default {
     ready: false,
     data: null,
     count: 0,
+    md5: null,
   }),
   beforeUnmount() {
     if (this.data) this.$bus.off('refresh', this.update)
@@ -34,7 +35,12 @@ export default {
       if (!this.expanded) return
       const needRegister = !this.data
       const tz = (new Date().getTimezoneOffset() / 60)*-1
+      if (this.md5) {
+        const hash = await this.$axios(`hash/${this.service.name}/${tz}`)
+        if (hash.data.hash === this.md5) return
+      }
       this.data = (await this.$axios(`get/${this.service.name}/${tz}`)).data
+      this.md5 = md5(JSON.stringify(this.data.data))
       if (needRegister) this.$bus.on('refresh', this.update)
     },
     onClick() {

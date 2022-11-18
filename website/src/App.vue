@@ -2,11 +2,20 @@
   <background>
     <header-bar :refresh="refresh" />
     <div class="flex-grow">
-      <card
-          v-for="service of services"
-          :key="service.name"
-          :service="service"
-      />
+      <transition-group
+          enter-active-class="duration-300 ease-out"
+          enter-from-class="transform opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="duration-200 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="transform opacity-0"
+      >
+        <card
+            v-for="service of services"
+            :key="service.name"
+            :service="service"
+        />
+      </transition-group>
     </div>
     <footer-bar />
   </background>
@@ -39,13 +48,17 @@ export default {
   },
   methods: {
     async schedule() {
-      if (this.refreshing) return
-      this.refresh--
-      if (this.refresh <= 0) {
-        this.refreshing = true
-        this.$bus.emit('refresh')
-        await this.refreshStatus()
-        this.refreshing = false
+      try {
+        if (this.refreshing) return
+        this.refresh--
+        if (this.refresh <= 0) {
+          this.refreshing = true
+          this.$bus.emit('refresh')
+          await this.refreshStatus()
+          this.refreshing = false
+        }
+      } catch (e) {
+        console.error('Could not get status! Is the API running?', e)
       }
     },
     async refreshStatus() {
@@ -61,4 +74,9 @@ export default {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+  @apply transition-colors duration-300;
+  @apply italic hover:text-blue-900;
+}
 </style>

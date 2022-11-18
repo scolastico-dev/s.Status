@@ -1,14 +1,16 @@
 <template>
   <div class="footer-bar">
-    <p>
-      s.Status made with ♥ by
-      <a href="https://scolasti.co" target="_blank">scolasti.co</a>
-    </p>
-    <p class="text-right">
-      <a href="https://github.com/scolastico-dev/s.Status" target="_blank">GitHub</a>
-    </p>
+    <translated text="footerLeft" />
+    <translated text="footerRight" class="text-right" />
   </div>
 </template>
+
+<script>
+import Translated from '@/Translated.vue'
+export default {
+  components: {Translated},
+}
+</script>
 
 <style>
 .footer-bar {
