@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <template>
-  <component :is="element" v-html="processedText" />
+  <component :is="element" v-html="processedText" :title="processedTooltip" />
 </template>
 
 <script>
@@ -14,6 +14,10 @@ export default {
       type: String,
       required: true,
     },
+    textTooltip: {
+      type: String,
+      default: null,
+    },
     values: {
       type: Object,
       default: () => ({}),
@@ -21,21 +25,29 @@ export default {
   },
   data: () => ({
     processedText: '',
+    processedTooltip: '',
   }),
   beforeMount() {
-    this.processText(this.text, this.values)
+    this.processAllText(this.text, this.textTooltip, this.values)
   },
   watch: {
     text(newVal) {
-      this.processText(newVal, this.values)
+      this.processAllText(newVal, this.textTooltip, this.values)
+    },
+    textTooltip(newVal) {
+      this.processAllText(this.text, newVal, this.values)
     },
     values(newVal) {
-      this.processText(this.text, newVal)
+      this.processAllText(this.text, this.textTooltip, newVal)
     },
   },
   methods: {
+    processAllText(text, tooltip, values) {
+      this.processedText = this.processText(text, values)
+      this.processedTooltip = tooltip ? this.processText(tooltip, values) : null
+    },
     processText(text, values) {
-      this.processedText = this.$lang.data[text]
+      return (this.$lang.data[text] || this.$lang.default[text] || `{{ ${text} }}`)
           .replace(/\{\{(\w+?)}}/g, (match, key) => values[key])
           .replace(/\[\[([\s\S]+?)\|(\S+?)]]/g, (match, name, url) => `<a href="${url}" target="_blank">${name}</a>`)
     },

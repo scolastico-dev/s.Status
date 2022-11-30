@@ -10,17 +10,19 @@ import mitt from 'mitt'
   const axios = Axios.create({})
   let currentLang = localStorage.getItem('lang') || navigator.language
   const availableLang = (await axios('assets/languages.json')).data
-  if (!availableLang.includes(currentLang)) {
-    currentLang = 'en-US'
-  }
-  if (!availableLang.includes(currentLang)) {
-    currentLang = availableLang[0]
+  while (!availableLang.includes(currentLang)) {
+    if (currentLang !== 'en-US') {
+      currentLang = 'en-US'
+    } else {
+      currentLang = availableLang[0]
+    }
   }
   localStorage.setItem('lang', currentLang)
   app.config.globalProperties.$lang = {
     current: currentLang,
     available: availableLang,
     data: (await axios(`assets/lang/${currentLang}.json`)).data,
+    default: ((await axios(`assets/lang/default.json`).catch(() => null)) || {}).data,
   }
 
   app.config.globalProperties.$axios = Axios.create({
