@@ -33,7 +33,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.6.10")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.7.20")
     }
 }
 
