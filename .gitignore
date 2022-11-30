@@ -182,3 +182,5 @@ admin-config.json
 error.*
 web.files/
 check.conf/
+
+.fleet/artifacts/**/*

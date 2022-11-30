@@ -4,272 +4,164 @@ on:
   push:
     branches: [main]
   release:
-    types: [created]
+    types: [published]
   pull_request:
     branches: [main]
 
 jobs:
-  prepare:
-    name: Prepare Workflow
+  build:
+    name: Build Application
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-        name: Download repo from GitHub
-      - name: Read project-settings.env file.
-        uses: c-py/action-dotenv-to-setenv@v2
-        with:
-          env-file: .github/actions.env
-      - uses: pozetroninc/github-action-get-latest-release@master
-        id: version
-        if: github.event_name == 'release'
-        name: Get latest version name from GitHub
-        with:
-          repository: ${{ env.USERNAME }}/${{ env.REPO }}
-          excludes: draft
-      - name: Declare some variables
-        id: vars
-        shell: bash
-        run: |
-          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Set version in build.gradle.kts
-        uses: datamonsters/replace-action@v2
-        if: github.event_name == 'release'
-        with:
-          files: build.gradle.kts
-          replacements: dev-snapshot=${{ steps.version.outputs.release }}
-      - name: Set version in VERSION file
-        uses: datamonsters/replace-action@v2
-        if: github.event_name == 'release'
-        with:
-          files: src/main/resources/staticVars/VERSION
-          replacements: dev-snapshot=${{ steps.version.outputs.release }}
-      - name: Set version in build.gradle.kts
-        uses: datamonsters/replace-action@v2
-        if: github.event_name != 'release'
-        with:
-          files: build.gradle.kts
-          replacements: dev-snapshot=dev-snapshot-${{ steps.vars.outputs.sha_short }}
-      - name: Set version in VERSION file
-        uses: datamonsters/replace-action@v2
-        if: github.event_name != 'release'
-        with:
-          files: src/main/resources/staticVars/VERSION
-          replacements: dev-snapshot=dev-snapshot-${{ steps.vars.outputs.sha_short }}
-      - name: Set branch in BRANCH file
-        uses: datamonsters/replace-action@v2
-        with:
-          files: src/main/resources/staticVars/BRANCH
-          replacements: IN-DEV=${{ steps.vars.outputs.branch }}
-      - name: Set commit hash in COMMIT file
-        uses: datamonsters/replace-action@v2
-        with:
-          files: src/main/resources/staticVars/COMMIT
-          replacements: IN-DEV=${{ steps.vars.outputs.sha_short }}
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
+      - uses: actions/checkout@v3
+      - name: Run setup script
+        run: chmod +x $FILE && ./$FILE
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+          FILE: .github/scripts/setup-repo.sh
+
+      # Setup JDK
       - name: Set up JDK 12
-        uses: actions/setup-java@v1
-        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/setup-java@v3
         with:
           java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
+          cache: gradle
+          distribution: adopt
       - name: Setting permissions
         run: chmod +x ./gradlew
       - name: Download dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: ./gradlew dependencies --refresh-dependencies
-      - name: Setup node.js 16
-        uses: actions/setup-node@v2
+
+      # Setup Node.js
+      - name: Set up node.js 16
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install pnpm
-        run: npm install -g pnpm
-      - name: Install dependencies
-        run: cd website && pnpm install
-      - uses: actions/upload-artifact@v2
-        name: Upload prepared repo to artifacts
-        with:
-          name: prepared-repo
-          path: ${{ github.workspace }}
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
-    needs:
-      - prepare
-      - build-web
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: prepared-repo
-      - uses: actions/download-artifact@v2
-        name: Download built website
-        with:
-          name: built-website
-      - name: Move built website
-        run: mv website/dist/ src/main/resources/web/
-      - name: Read project-settings.env file.
-        uses: c-py/action-dotenv-to-setenv@v2
-        with:
-          env-file: .github/actions.env
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
-      - name: Set up JDK 12
-        uses: actions/setup-java@v1
-        with:
-          java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
-      - name: Setting permissions
-        run: chmod +x ./gradlew
-      - name: Build with gradle
+          cache: npm
+          cache-dependency-path: website/pnpm-lock.yaml
+      - name: Install node modules
+        run: cd website && npm i -g pnpm && pnpm install
+
+      # Build the website
+      - name: Build website
+        run: cd website && npm run build
+      - name: Move website into resources
+        run: rm -rf src/main/resources/web && mv website/dist src/main/resources/web
+
+      # Build the App
+      - name: Build app
+        if: always()
         run: ./gradlew build -x detekt
+
+      # Upload the .jar file
       - uses: actions/upload-artifact@v2
         name: Upload builded jar to artifacts
         with:
           name: build
           path: ${{ github.workspace }}/build/libs/${{ env.JAR_NAME }}
           retention-days: 1
-      - uses: actions/upload-artifact@v2
-        name: Upload builded repo to artifacts
-        with:
-          name: builded-repo
-          path: ${{ github.workspace }}
   test:
     name: Test Application
     runs-on: ubuntu-20.04
-    needs: Build
+    needs: build
     steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: builded-repo
-      - name: Read project-settings.env file.
-        uses: c-py/action-dotenv-to-setenv@v2
-        with:
-          env-file: .github/actions.env
-      - name: Read project-settings.env file.
-        uses: c-py/action-dotenv-to-setenv@v2
-        with:
-          env-file: .github/actions.env
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
+      - uses: actions/checkout@v3
+
+      # Setup JDK
       - name: Set up JDK 12
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
+          cache: gradle
+          distribution: adopt
       - name: Setting permissions
         run: chmod +x ./gradlew
-      - name: Test with gradle
-        run: ./gradlew test
-  test-web:
-    name: Test Website
-    runs-on: ubuntu-20.04
-    needs: prepare
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: prepared-repo
-      - name: Setup node.js 16
-        uses: actions/setup-node@v2
+      - name: Download dependencies
+        run: ./gradlew dependencies --refresh-dependencies
+
+      # Setup Node.js
+      - name: Set up node.js 16
+        uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: npm
+          cache-dependency-path: website/pnpm-lock.yaml
+      - name: Install node modules
+        run: cd website && npm i -g pnpm && pnpm install
+
+      # Run tests
       - name: Run eslint
         run: cd website && npm run lint
-    build-web:
-      name: Build Website
-      runs-on: ubuntu-20.04
-      needs: test-web
-      steps:
-        - uses: actions/download-artifact@v2
-          name: Download prepared repository
-          with:
-            name: prepared-repo
-        - name: Build website
-          run: cd website && npm run build
-        - uses: actions/upload-artifact@v2
-          name: Upload builded website to artifacts
-          with:
-            name: built-website
-            path: ${{ github.workspace }}/website/dist
-  dokka:
-    name: Generate Dokka
+      - name: Test with gradle
+        if: always()
+        run: ./gradlew test
+      - name: Perform detekt analysis
+        if: always()
+        run: ./gradlew detekt
+  docs:
+    name: Build Documentation
     runs-on: ubuntu-20.04
-    needs: [prepare, build-docs]
+    needs: build
     steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
+      - uses: actions/checkout@v3
+      - name: Run setup script
+        run: chmod +x $FILE && ./$FILE
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+          FILE: .github/scripts/setup-repo.sh
+
+      # Build mkdocs
+      - uses: actions/setup-python@v2
         with:
-          name: prepared-repo
-      - name: Read project-settings.env file.
-        uses: c-py/action-dotenv-to-setenv@v2
-        with:
-          env-file: .github/actions.env
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.gradle
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
+          python-version: '3.x'
+          architecture: 'x64'
+      - name: Setup MkDocs
+        run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
+      - name: Generate Documentation
+        run: mkdocs build --no-directory-urls -f ./docs/mkdocs.yml
+
+      # Build javadoc
       - name: Set up JDK 12
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
+          cache: gradle
+          distribution: adopt
       - name: Setting permissions
         run: chmod +x ./gradlew
+      - name: Download dependencies
+        run: ./gradlew dependencies --refresh-dependencies
       - name: Generate dokka html with gradle
         run: ./gradlew dokkaHtml
       - name: Generate dokka javadaoc with gradle
         run: ./gradlew dokkaJavadoc
-      - uses: actions/download-artifact@v2
-        name: Download builded documentation
-        with:
-          name: builded-docs
-          path: site/
+
+      # Combine the documentation
       - name: Move javadoc files into documentation.
-        run: mv build/dokka/javadoc site/javadoc
+        run: mv build/dokka/javadoc docs/site/javadoc
       - name: Move dokka files into documentation.
-        run: mv build/dokka/html site/dokka
+        run: mv build/dokka/html docs/site/dokka
+
+        # Upload the documentation
       - uses: actions/upload-artifact@v2
-        name: Upload dokka documentation to artifacts
+        name: Upload documentation to artifacts
         with:
-          name: dokka-docs
-          path: ${{ github.workspace }}/site/
+          name: docs
+          path: ${{ github.workspace }}/docs/site/
           retention-days: 1
   ci:
     name: Continuous integration
     if: github.event_name == 'release'
     runs-on: ubuntu-20.04
-    needs: [build, dokka, test, detekt]
+    needs: [docs, test]
     steps:
-      - uses: actions/download-artifact@v2
-        name: Download prepared repository
-        with:
-          name: prepared-repo
-          path: repo/
+      - uses: actions/checkout@v3
       - name: Read project-settings.env file.
         uses: c-py/action-dotenv-to-setenv@v2
         with:
           env-file: repo/.github/actions.env
+
+      # Download the artifacts
       - uses: actions/download-artifact@v2
         name: Download build
         with:
@@ -277,8 +169,10 @@ jobs:
       - uses: actions/download-artifact@v2
         name: Download dokka-docs
         with:
-          name: dokka-docs
+          name: docs
           path: docs/
+
+      # Upload docs
       - uses: papeloto/action-zip@v1
         with:
           files: docs/
@@ -291,6 +185,8 @@ jobs:
           asset_name: docs.zip
           tag: ${{ github.ref }}
           overwrite: true
+
+      # Upload binaries
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
@@ -299,6 +195,8 @@ jobs:
           asset_name: ${{ env.JAR_NAME }}
           tag: ${{ github.ref }}
           overwrite: true
+
+      # Ci to pages or rsync
       - uses: peaceiris/actions-gh-pages@v3
         if: ${{ env.CI_DOCS_TO_GH_PAGES == 'yes' }}
         name: Update live documentation on GH pages
@@ -314,65 +212,3 @@ jobs:
       - name: Deploy with rsync
         if: ${{ env.CI_DOCS_TO_SERVER == 'yes' }}
         run: rsync -avz -e 'ssh -p ${{ secrets.SSH_PORT }}' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DOCUMENTATION_REMOTE_HOST_PATH }}
-  cleanup:
-    name: Cleanup
-    runs-on: ubuntu-20.04
-    continue-on-error: true
-    if: always()
-    needs: [prepare, test, build, dokka, ci, detekt, build-docs]
-    steps:
-      - uses: geekyeggo/delete-artifact@v1
-        name: Delete prepared repo artifact
-        with:
-          name: prepared-repo
-      - uses: geekyeggo/delete-artifact@v1
-        name: Delete prepared repo artifact
-        with:
-          name: builded-repo
-      - uses: geekyeggo/delete-artifact@v1
-        name: Delete prepared repo artifact
-        with:
-          name: builded-docs
-  build-docs:
-    name: Generate documentation
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-          architecture: 'x64'
-      - name: Setup MkDocs
-        run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
-      - name: Generate Documentation
-        run: mkdocs build --no-directory-urls -f ./docs/mkdocs.yml
-      - uses: actions/upload-artifact@v2
-        name: Upload builded files to artifacts
-        with:
-          name: builded-docs
-          path: docs/site/
-  detekt:
-    name: Detekt code analysis
-    needs: prepare
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/download-artifact@v2
-        name: Download builded repository
-        with:
-          name: prepared-repo
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle.kts') }}
-      - name: Set up JDK 12
-        uses: actions/setup-java@v1
-        with:
-          java-version: 12
-          server-id: github
-          settings-path: ${{ github.workspace }}
-      - name: Setting permissions
-        run: chmod +x ./gradlew
-      - name: Perform detekt analysis
-        run: ./gradlew detekt

@@ -27,6 +27,19 @@ Because the application needs for the ping icmp package root privileges its reco
 ### Manual
 Download from the latest release the `status-shadow.jar` and save it in a new folder where you want to execute the application. After that simply start the jar with the `java -jar status-shadow.jar` command. After the first start you will be asked to edit the generated configuration.
 
+## Development
+
+### Requirements
+Needed:
+| Name   | Version | Link                                                |
+| JDK    | 12      | [openjdk.org](https://openjdk.org/projects/jdk/12/) |
+| NodeJS | 18      | [nodejs.org](https://nodejs.org/en/download/)       |
+
+Partly needed:
+| Name   | Version | Is needed for                                   | Link                                           |
+| Docker | 20      | building the docker image and testing workflows | [docker.com](https://docs.docker.com/desktop/) |
+| act    | 0.2     | testing workflows                               | [github.com](https://github.com/nektos/act)    |
+
 ## License
 This project is licensed under the **Mozilla Public License 2.0**.
 ### About

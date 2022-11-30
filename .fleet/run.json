@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "command",
+            "name": "Run GitHub Workflow (Works only on Linux)",
+            "program": "/bin/bash",
+            "workingDir": "./",
+            "args": [
+                "-c",
+                "echo Requiring sudo to launch docker. && sudo ./.fleet/act"
+            ],
+        },
+
+    ]
+}

@@ -1,0 +1,3 @@
+-W .github/workflows/main.yml
+--artifact-server-path .fleet/artifcats/
+-P ubuntu-20.04=nektos/act-environments-ubuntu:18.04
