@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="average_cache" identityType="external" pkName="pk_average_cache">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="uptime" type="integer(3)" notnull="true"/>
+            <column name="duration" type="integer" notnull="true"/>
+            <column name="at" type="timestamp" notnull="true"/>
+            <column name="timezone" type="integer(2)" notnull="true"/>
+        </createTable>
+        <createTable name="check_downtime" identityType="external" pkName="pk_check_downtime">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="from_time" type="timestamp" notnull="true"/>
+            <column name="until_time" type="timestamp"/>
+            <column name="yellow" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="messages" type="varchar[]" notnull="true"/>
+        </createTable>
+        <createTable name="check_maintenance" identityType="external" pkName="pk_check_maintenance">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="from_time" type="timestamp" notnull="true"/>
+            <column name="until_time" type="timestamp"/>
+            <column name="message" type="varchar" notnull="true"/>
+        </createTable>
+        <createTable name="check_response" identityType="external" pkName="pk_check_response">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="duration" type="integer" notnull="true"/>
+            <column name="at" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="started_actions" identityType="external" pkName="pk_started_actions">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="check_name" type="varchar" notnull="true"/>
+            <column name="action" type="varchar" notnull="true"/>
+            <column name="at" type="timestamp" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

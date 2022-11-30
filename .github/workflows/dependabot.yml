@@ -1,0 +1,30 @@
+name: Dependabot Auto Response
+on: pull_request
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Download repo from GitHub.
+        uses: actions/checkout@v3
+      - name: Read project-settings.env file.
+        uses: c-py/action-dotenv-to-setenv@v2
+        with:
+          env-file: .github/actions.env
+      - name: Approve PR
+        if: ${{ env.AUTO_APPROVE == 'yes' }}
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Merge PR
+        if: ${{ env.AUTO_MERGE == 'yes' }}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

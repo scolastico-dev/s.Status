@@ -1,0 +1,21 @@
+{
+  "title": null,
+  "currentMaintenance": "Поточне обслуговування: {{notice}}",
+  "refresh": "Оновлення в {{refresh}}",
+  "latestResponse": "Час останньої відповіді (мс)",
+  "footerLeft": "s.Status made with ♥ from [[scolasti.co|https://scolasti.co]]",
+  "plannedMaintenance": "Планове технічне обслуговування: {{notice}}",
+  "currentIncident": "Поточна несправність: {{notice}}",
+  "message": "Повідомлення",
+  "averageResponse": "Середній час відгуку (мс)",
+  "uptime": "Наявність (%)",
+  "refreshingErrorDetails": "Сталася помилка. Будь ласка, перезавантажте сторінку.",
+  "refreshing": "Оновлення...",
+  "refreshingError": "Не вдалося оновити",
+  "incidents": "Збої в роботі",
+  "messages": "Новини",
+  "from": "фон",
+  "to": "біс",
+  "maintenance": "Технічне обслуговування",
+  "footerRight": "[[GitHub|https://github.com/scolastico-dev/s.Status]]"
+}
