@@ -1,0 +1,21 @@
+{
+  "title": null,
+  "currentMaintenance": "Manutenzione corrente: {{notice}}",
+  "refresh": "Aggiornamento in {{refresh}}",
+  "latestResponse": "Ultimo tempo di risposta (ms)",
+  "footerLeft": "s.Status realizzato con ♥ da [[scolasti.co|https://scolasti.co]]",
+  "plannedMaintenance": "Manutenzione programmata: {{notice}}",
+  "currentIncident": "Guasto attuale: {{notice}}",
+  "message": "Messaggio",
+  "averageResponse": "Tempo medio di risposta (ms)",
+  "uptime": "Disponibilità (%)",
+  "refreshingErrorDetails": "Si è verificato un errore. Ricaricare la pagina.",
+  "refreshing": "Aggiornamento...",
+  "refreshingError": "Aggiornamento fallito",
+  "incidents": "Interruzioni",
+  "messages": "Notizie",
+  "from": "da",
+  "to": "a",
+  "maintenance": "Manutenzione",
+  "footerRight": "[[GitHub|https://github.com/scolastico-dev/s.Status]]"
+}

@@ -1,0 +1,21 @@
+{
+  "title": null,
+  "currentMaintenance": "Bieżąca konserwacja: {{notice}}",
+  "refresh": "Aktualizacja w {{refresh}}",
+  "latestResponse": "Czas ostatniej reakcji (ms)",
+  "footerLeft": "s.Status wykonany z ♥ z [[scolasti.co|https://scolasti.co]]",
+  "plannedMaintenance": "Planowa konserwacja: {{notice}}",
+  "currentIncident": "Aktualna usterka: {{notice}}",
+  "message": "Wiadomość",
+  "averageResponse": "Średni czas reakcji (ms)",
+  "uptime": "Dostępność (%)",
+  "refreshingErrorDetails": "Wystąpił błąd. Proszę przeładować stronę.",
+  "refreshing": "Aktualizacja...",
+  "refreshingError": "Aktualizacja nie powiodła się",
+  "incidents": "Zakłócenia",
+  "messages": "Aktualności",
+  "from": "z",
+  "to": "do",
+  "maintenance": "Konserwacja",
+  "footerRight": "[[GitHub|https://github.com/scolastico-dev/s.Status]]"
+}
