@@ -13,7 +13,7 @@
       <p>
         {{ formatTime(item.until) }}
       </p>
-      <p class="whitespace-pre">{{ incidents ? item.messages.join('\n') : item.message }}</p>
+      <p v-html="incidents ? item.messages.join('<br/>') : item.message" />
     </div>
   </div>
 </template>
