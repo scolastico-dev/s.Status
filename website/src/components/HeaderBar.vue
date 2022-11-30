@@ -4,7 +4,9 @@
       <translated element="h1" text="title" />
     </h1>
     <div class="flex justify-end items-end">
-      <translated text="refresh" :values="{refresh}" />
+      <translated v-if="!error && refresh === 0" text="refreshing" />
+      <translated v-else-if="!error" text="refresh" :values="{refresh}" />
+      <translated v-else text="refreshingError" text-tooltip="refreshingErrorDetails" />
     </div>
   </div>
 </template>
@@ -16,6 +18,10 @@ export default {
   props: {
     refresh: {
       type: Number,
+      required: true,
+    },
+    error: {
+      type: Boolean,
       required: true,
     },
   },

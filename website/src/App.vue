@@ -1,6 +1,6 @@
 <template>
   <background>
-    <header-bar :refresh="refresh" />
+    <header-bar :refresh="refresh" :error="error" />
     <div class="flex-grow">
       <transition-group
           enter-active-class="duration-300 ease-out"
@@ -38,6 +38,7 @@ export default {
     refresh: 0,
     refreshing: false,
     scheduler: null,
+    error: false,
   }),
   async beforeMount() {
     await this.refreshStatus()
@@ -59,6 +60,8 @@ export default {
         }
       } catch (e) {
         console.error('Could not get status! Is the API running?', e)
+        clearInterval(this.scheduler)
+        this.error = true
       }
     },
     async refreshStatus() {

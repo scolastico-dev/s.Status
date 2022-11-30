@@ -1,14 +1,14 @@
 <template>
   <div class="card-body">
-    <info-card v-for="(card, index) in cards" :key="index" v-bind="card" />
+    <info-card v-for="(card, index) in cards" :key="index" v-bind="card"/>
     <translated element="h3" text="latestResponse" />
     <canvas ref="newest" />
     <translated element="h3" text="uptime" />
     <canvas ref="uptime" />
     <translated element="h3" text="averageResponse" />
     <canvas ref="duration" />
-    <incident-table :incidents="false" :data="data.data.maintenances.slice().reverse()" />
-    <incident-table :incidents="true" :data="data.data.downtimes.slice().reverse()" />
+    <incident-table :incidents="false" :data="maintenances" />
+    <incident-table :incidents="true" :data="downtimes" />
   </div>
 </template>
 
@@ -29,10 +29,12 @@ export default {
   data: () => ({
     charts: {},
     cards: [],
+    maintenances: [],
+    downtimes: [],
   }),
   emits: ['ready'],
   mounted() {
-    this.update(this.data)
+    if (this.data) this.update(this.data)
     this.$emit('ready')
   },
   watch: {
@@ -44,28 +46,38 @@ export default {
     async update(data) {
       const cards = []
       const {newest, averages, maintenances, downtimes} = data.data
+
+      this.maintenances = maintenances.slice().sort((a, b) => a.from - b.from).reverse()
+      this.downtimes = downtimes.slice().sort((a, b) => a.from - b.from).reverse()
+
       this.generate('newest', 'latestResponse', 'duration', newest, data.chartColorsResponse, true)
       this.generate('uptime', 'uptime', 'uptime', averages, data.chartColorsUptime, false, 0, 100)
       this.generate('duration', 'averageResponse', 'duration', averages, data.chartColorsResponse, false)
+
       const openDowntimes = downtimes.filter((d) => d.until === null || Number(d.until) > Date.now() / 1000)
       const downtime = openDowntimes.sort((a, b) => Number(a.from) - Number(b.from))[0]
       if (downtime) cards.push({error: true, text: 'currentIncident', notice: downtime.message})
+
       const currentMaintenances = maintenances.filter((m) =>
         Number(m.from) < Date.now() / 1000 && (m.until === null || Number(m.until) > Date.now() / 1000),
       )
+
       const currentMaintenance = currentMaintenances.sort((a, b) => Number(a.from) - Number(b.from))[0]
       if (currentMaintenance) cards.push({error: false, text: 'currentMaintenance', notice: currentMaintenance.message})
+
       const nextMaintenances = maintenances.filter((m) => Number(m.from) > Date.now() / 1000)
       const maintenance = nextMaintenances.sort((a, b) => Number(a.from) - Number(b.from))[0]
       if (maintenance) cards.push({error: false, text: 'plannedMaintenance', notice: maintenance.message})
       if (JSON.stringify(cards) !== JSON.stringify(this.cards)) this.cards = cards
     },
     generate(name, label, watch, data, colors, time, min, max) {
+      data = data.sort((a, b) => Number(a.at - Number(b.at)))
       const generateDate = (unix) => {
         const date = new Date(Number(unix)*1000)
         if (time) return date.toLocaleTimeString()
         else return date.toLocaleDateString()
       }
+
       const payload = {
         labels: data.map((x) => generateDate(x.at)),
         datasets: [{
@@ -80,6 +92,7 @@ export default {
           label: this.$lang.data[label],
         }],
       }
+
       if (this.charts[name]) {
         this.charts[name].data = payload
         this.charts[name].update('none')
