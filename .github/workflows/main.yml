@@ -92,6 +92,15 @@ jobs:
         run: npm install -g pnpm
       - name: Install dependencies
         run: cd website && pnpm install
+      - name: Compress action step
+        uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          files: |
+            ./website/node_modules
+          outPath: node_modules.tar.gz
+      - name: Delete node_modules
+        run: rm -rf ./website/node_modules
       - uses: actions/upload-artifact@v2
         name: Upload prepared repo to artifacts
         with:
@@ -187,6 +196,13 @@ jobs:
         name: Download prepared repository
         with:
           name: prepared-repo
+      - name: Extract node_modules
+        uses: a7ul/tar-action@v1.1.0
+        with:
+          command: x
+          files: |
+            ./node_modules.tar.gz
+          outPath: ./
       - name: Setup node.js 16
         uses: actions/setup-node@v2
         with:
