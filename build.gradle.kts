@@ -83,7 +83,7 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("me.scolastico:tools:2.2.3")
     implementation("io.leego:banana:2.1.0")
-    implementation("io.bkbn:kompendium-core:2.3.1")
+    implementation("io.bkbn:kompendium-core:3.9.0")
     implementation("io.bkbn:kompendium-swagger-ui:2.3.1")
     implementation("ch.qos.logback:logback-core:1.2.11")
     implementation("rome:rome:1.0")
