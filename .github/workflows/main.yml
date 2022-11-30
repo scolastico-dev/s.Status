@@ -84,6 +84,14 @@ jobs:
       - name: Download dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./gradlew dependencies --refresh-dependencies
+      - name: Setup node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: cd website && pnpm install
       - uses: actions/upload-artifact@v2
         name: Upload prepared repo to artifacts
         with:
@@ -92,12 +100,20 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-20.04
-    needs: prepare
+    needs:
+      - prepare
+      - build-web
     steps:
       - uses: actions/download-artifact@v2
         name: Download prepared repository
         with:
           name: prepared-repo
+      - uses: actions/download-artifact@v2
+        name: Download built website
+        with:
+          name: built-website
+      - name: Move built website
+        run: mv website/dist/ src/main/resources/web/
       - name: Read project-settings.env file.
         uses: c-py/action-dotenv-to-setenv@v2
         with:
@@ -130,7 +146,7 @@ jobs:
           name: builded-repo
           path: ${{ github.workspace }}
   test:
-    name: Test
+    name: Test Application
     runs-on: ubuntu-20.04
     needs: Build
     steps:
@@ -162,6 +178,37 @@ jobs:
         run: chmod +x ./gradlew
       - name: Test with gradle
         run: ./gradlew test
+  test-web:
+    name: Test Website
+    runs-on: ubuntu-20.04
+    needs: prepare
+    steps:
+      - uses: actions/download-artifact@v2
+        name: Download prepared repository
+        with:
+          name: prepared-repo
+      - name: Setup node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Run eslint
+        run: cd website && npm run lint
+    build-web:
+      name: Build Website
+      runs-on: ubuntu-20.04
+      needs: test-web
+      steps:
+        - uses: actions/download-artifact@v2
+          name: Download prepared repository
+          with:
+            name: prepared-repo
+        - name: Build website
+          run: cd website && npm run build
+        - uses: actions/upload-artifact@v2
+          name: Upload builded website to artifacts
+          with:
+            name: built-website
+            path: ${{ github.workspace }}/website/dist
   dokka:
     name: Generate Dokka
     runs-on: ubuntu-20.04
