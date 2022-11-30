@@ -193,22 +193,22 @@ jobs:
           node-version: 16
       - name: Run eslint
         run: cd website && npm run lint
-    build-web:
-      name: Build Website
-      runs-on: ubuntu-20.04
-      needs: test-web
-      steps:
-        - uses: actions/download-artifact@v2
-          name: Download prepared repository
-          with:
-            name: prepared-repo
-        - name: Build website
-          run: cd website && npm run build
-        - uses: actions/upload-artifact@v2
-          name: Upload builded website to artifacts
-          with:
-            name: built-website
-            path: ${{ github.workspace }}/website/dist
+  build-web:
+    name: Build Website
+    runs-on: ubuntu-20.04
+    needs: test-web
+    steps:
+      - uses: actions/download-artifact@v2
+        name: Download prepared repository
+        with:
+          name: prepared-repo
+      - name: Build website
+        run: cd website && npm run build
+      - uses: actions/upload-artifact@v2
+        name: Upload builded website to artifacts
+        with:
+          name: built-website
+          path: ${{ github.workspace }}/website/dist
   dokka:
     name: Generate Dokka
     runs-on: ubuntu-20.04
