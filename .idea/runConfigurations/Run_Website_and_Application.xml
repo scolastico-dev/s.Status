@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Website and Application" type="CompoundRunConfigurationType">
+    <toRun name="Run Application" type="JetRunConfigurationType" />
+    <toRun name="Run Website" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>
