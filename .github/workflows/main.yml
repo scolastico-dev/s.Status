@@ -54,7 +54,7 @@ jobs:
         run: ./gradlew build -x detekt
 
       # Upload the .jar file
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload builded jar to artifacts
         with:
           name: build
@@ -111,7 +111,7 @@ jobs:
           FILE: .github/scripts/setup-repo.sh
 
       # Build mkdocs
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v3
         with:
           python-version: '3.x'
           architecture: 'x64'
@@ -143,7 +143,7 @@ jobs:
         run: mv build/dokka/html docs/site/dokka
 
         # Upload the documentation
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         name: Upload documentation to artifacts
         with:
           name: docs
