@@ -7,9 +7,8 @@
             "workingDir": "./",
             "args": [
                 "-c",
-                "echo Requiring sudo to launch docker. && sudo ./.fleet/act"
-            ],
-        },
-
+                "FILE=./.fleet/act.sh && chmod +x $FILE && $FILE"
+            ]
+        }
     ]
 }
